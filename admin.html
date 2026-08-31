@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administración · Portal SIGC</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul-900:#00234B; --azul-800:#003C71; --azul-600:#0B6FB4; --cian:#23A9D8;
+  --dorado:#F0B323; --tinta:#16202B; --gris:#5B6B7C; --gris-claro:#8A99A8;
+  --linea:#DCE3EA; --papel:#F1F4F7; --blanco:#fff; --exito:#1B7F5A; --alerta:#B3421B;
+  --sans:"Libre Franklin",system-ui,sans-serif; --mono:"IBM Plex Mono",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);color:var(--tinta);background:var(--papel);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+p{margin:0 0 .8em}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14.5px;color:var(--tinta)}
+:focus-visible{outline:3px solid var(--cian);outline-offset:2px}
+.oculto{display:none !important}
+code{font-family:var(--mono);font-size:13px}
+
+/* ---------- Acceso ---------- */
+.acceso{min-height:100vh;display:grid;place-items:center;padding:30px;background:var(--azul-900)}
+.acceso__caja{background:#fff;width:100%;max-width:390px;padding:36px 34px;border-top:4px solid var(--dorado)}
+.acceso__caja h1{font-size:22px;margin-bottom:6px}
+.acceso__caja p.sub{color:var(--gris);font-size:14px;margin-bottom:24px}
+.campo{margin-bottom:15px}
+.campo label{display:block;font-size:13px;font-weight:500;margin-bottom:5px}
+.campo input,.campo select,.campo textarea{width:100%;padding:9px 11px;border:1px solid var(--linea);border-radius:3px;background:#fff}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:var(--azul-600);outline:none;box-shadow:0 0 0 3px rgba(11,111,180,.13)}
+.campo .pista{font-size:12px;color:var(--gris-claro);margin:4px 0 0}
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:var(--azul-800);color:#fff;border:1px solid var(--azul-800);padding:9px 16px;border-radius:3px;font-weight:600;font-size:14px}
+.boton:hover{background:var(--azul-900)}
+.boton--ancho{width:100%;padding:11px}
+.boton--sec{background:#fff;color:var(--azul-800);border-color:var(--linea)}
+.boton--sec:hover{background:var(--papel)}
+.boton--peligro{background:#fff;color:var(--alerta);border-color:#EBC3B4}
+.boton--peligro:hover{background:#FDF1EC}
+.boton--min{padding:5px 9px;font-size:13px;font-weight:500}
+.aviso{border-left:3px solid var(--alerta);background:#FDF1EC;color:#7A3315;padding:9px 12px;font-size:13.5px;margin-bottom:14px}
+.aviso--ok{border-left-color:var(--exito);background:#EDF7F2;color:#125C41}
+
+/* ---------- Marco ---------- */
+.marco{display:flex;min-height:100vh}
+.lateral{width:236px;flex:none;background:var(--azul-900);color:#C6D9E7;display:flex;flex-direction:column;padding-bottom:18px}
+.lateral__cabeza{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.13)}
+.lateral__cabeza b{display:block;color:#fff;font-size:14.5px}
+.lateral__cabeza span{font-size:12px;color:#87A7BF;display:block;margin-top:3px}
+.lateral nav{padding:12px 0;flex:1}
+.lateral nav button{display:block;width:100%;text-align:left;background:none;border:none;color:#C6D9E7;padding:9px 20px;font-size:14px;border-left:3px solid transparent}
+.lateral nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+.lateral nav button[aria-current="true"]{background:rgba(255,255,255,.1);color:#fff;border-left-color:var(--dorado);font-weight:600}
+.lateral__pie{padding:0 20px;font-size:12.5px;color:#7E9DB5}
+.lateral__pie button{background:none;border:none;color:#9FBBD1;padding:6px 0;display:block;font-size:13px}
+.lateral__pie button:hover{color:#fff;text-decoration:underline}
+
+.principal{flex:1;min-width:0;display:flex;flex-direction:column}
+.cinta{background:var(--dorado);color:#4A3600;font-size:12px;font-weight:600;padding:5px 24px}
+.zona{padding:26px 30px 70px;max-width:1080px}
+.encabezado{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.encabezado h1{font-size:24px;margin-bottom:5px}
+.encabezado p{color:var(--gris);font-size:14px;margin:0;max-width:70ch}
+
+/* ---------- Tablas y tarjetas ---------- */
+.panel{background:#fff;border:1px solid var(--linea)}
+table.datos{width:100%;border-collapse:collapse;background:#fff;font-size:14px}
+table.datos th{text-align:left;background:#EAF0F5;color:var(--azul-900);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--linea);font-size:13px}
+table.datos td{padding:10px 12px;border-bottom:1px solid var(--linea);vertical-align:middle}
+table.datos tr:last-child td{border-bottom:none}
+table.datos .acc{white-space:nowrap;text-align:right}
+table.datos .acc button{margin-left:6px}
+.etiqueta{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 7px;border:1px solid var(--linea);color:var(--gris)}
+.etiqueta.pub{border-color:#B6DECB;background:#EDF7F2;color:#125C41}
+.codigo{font-family:var(--mono);font-size:12.5px;color:var(--azul-600)}
+
+.bloque{background:#fff;border:1px solid var(--linea);padding:20px 22px;margin-bottom:16px}
+.bloque h2{font-size:17px;margin-bottom:4px}
+.bloque > p.desc{color:var(--gris);font-size:13.5px;margin-bottom:16px}
+.rejilla{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rejilla--3{grid-template-columns:repeat(3,1fr)}
+
+/* Módulos y lecciones */
+.modulo{border:1px solid var(--linea);background:#fff;margin-bottom:12px}
+.modulo__cabeza{display:flex;gap:12px;align-items:center;padding:12px 14px;background:#F7FAFC;border-bottom:1px solid var(--linea)}
+.modulo__cabeza input{flex:1;border:1px solid transparent;background:transparent;padding:5px 7px;font-weight:600;font-size:15px}
+.modulo__cabeza input:hover{border-color:var(--linea);background:#fff}
+.modulo__num{font-family:var(--mono);font-size:12px;color:var(--cian);font-weight:600}
+.leccion-fila{display:flex;gap:12px;align-items:center;padding:9px 14px 9px 30px;border-bottom:1px solid var(--linea);font-size:14px}
+.leccion-fila:last-child{border-bottom:none}
+.leccion-fila .tit{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leccion-fila .acc{white-space:nowrap}
+.leccion-fila .acc button{margin-left:5px}
+.modulo__pie{padding:10px 14px;border-top:1px solid var(--linea);background:#FCFDFE}
+
+/* Preguntas */
+.pregunta-ed{border:1px solid var(--linea);padding:14px;margin-bottom:12px;background:#FCFDFE}
+.pregunta-ed .fila-op{display:flex;gap:9px;align-items:center;margin-bottom:7px}
+.pregunta-ed .fila-op input[type=text]{flex:1;padding:7px 9px;border:1px solid var(--linea);border-radius:3px}
+.pregunta-ed .fila-op label{font-size:12.5px;color:var(--gris);display:flex;gap:5px;align-items:center;white-space:nowrap}
+
+/* Diseño */
+.color-fila{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.color-fila label{width:120px;font-size:13.5px}
+.color-fila input[type=color]{width:44px;height:32px;padding:0;border:1px solid var(--linea);background:#fff;border-radius:3px;cursor:pointer}
+.color-fila input[type=text]{width:110px;font-family:var(--mono);font-size:13px;padding:7px 9px;border:1px solid var(--linea);border-radius:3px;text-transform:uppercase}
+.muestra{border:1px solid var(--linea);padding:0;overflow:hidden}
+.muestra__barra{background:var(--azul-900);color:#fff;padding:11px 14px;font-size:13.5px;font-weight:600}
+.muestra__avance{height:3px;background:#01305F}
+.muestra__avance i{display:block;height:100%;width:46%;background:var(--cian)}
+.muestra__cuerpo{padding:18px;background:var(--papel)}
+.muestra__placa{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--azul-600);border:1px solid var(--linea);border-left:3px solid var(--cian);padding:3px 7px;background:#fff}
+.muestra h3{margin:10px 0 8px;font-size:20px;color:var(--tinta)}
+.muestra p.lect{margin:0 0 12px}
+.muestra .btn{display:inline-block;background:var(--azul-800);color:#fff;padding:8px 14px;font-weight:600;font-size:13.5px}
+.muestra .destac{border-left:3px solid var(--azul-600);background:#F0F6FB;padding:10px 12px;font-size:13px;margin-top:12px}
+.pila{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.aviso-flotante{position:fixed;right:20px;bottom:20px;background:var(--azul-900);color:#fff;padding:10px 16px;font-size:13.5px;border-left:3px solid var(--exito);z-index:60}
+
+@media (max-width:900px){
+  .marco{flex-direction:column}
+  .lateral{width:100%}
+  .lateral nav{display:flex;flex-wrap:wrap;padding:6px}
+  .lateral nav button{width:auto;border-left:none;border-bottom:3px solid transparent}
+  .lateral nav button[aria-current="true"]{border-left:none;border-bottom-color:var(--dorado)}
+  .rejilla,.rejilla--3{grid-template-columns:1fr}
+  .zona{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== ACCESO ADMINISTRADOR ===================== -->
+<main class="acceso" id="vista-acceso">
+  <form class="acceso__caja" id="form-admin" novalidate>
+    <h1>Administración del portal</h1>
+    <p class="sub">Oficina de Calidad Institucional · Dirección de Planeación y Estudios Institucionales</p>
+    <div id="msg"></div>
+    <div class="campo">
+      <label for="a-correo">Usuario</label>
+      <input id="a-correo" type="email" autocomplete="username" value="" placeholder="admin@uninorte.edu.co">
+    </div>
+    <div class="campo">
+      <label for="a-clave">Contraseña</label>
+      <input id="a-clave" type="password" autocomplete="current-password">
+    </div>
+    <button class="boton boton--ancho" type="submit">Entrar</button>
+    <p class="pista" style="margin-top:16px;font-size:12.5px;color:var(--gris-claro)">
+      Acceso restringido. Si es la primera vez, usa las credenciales iniciales entregadas con la instalación y cámbialas en la sección Cuenta.
+    </p>
+  </form>
+</main>
+
+<!-- ===================== PANEL ===================== -->
+<div class="marco oculto" id="vista-panel">
+  <aside class="lateral">
+    <div class="lateral__cabeza">
+      <b>Administración</b>
+      <span>Portal de inducción al SIGC</span>
+    </div>
+    <nav id="nav"></nav>
+    <div class="lateral__pie">
+      <button id="btn-ver-portal">Abrir el portal de aprendices</button>
+      <button id="btn-salir">Cerrar sesión</button>
+    </div>
+  </aside>
+  <div class="principal">
+    <div class="cinta">Modo administración · los cambios afectan a todos los aprendices de este equipo</div>
+    <div class="zona" id="zona"></div>
+  </div>
+</div>
+
+<script src="datos.js"></script>
+<script>
+/* =====================================================================
+   PANEL DE ADMINISTRACIÓN
+   Escribe sobre las mismas claves que consume el portal de aprendices.
+   ===================================================================== */
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const ADMIN_INICIAL = { correo: "admin@uninorte.edu.co", clave: "SIGC-Admin-2026" };
+
+let cursos = [];
+let tema = cargarTema();
+let vista = { seccion: "cursos", cursoId: null, moduloId: null, leccionId: null };
+
+const SECCIONES = [
+  { id: "cursos", rotulo: "Cursos" },
+  { id: "diseno", rotulo: "Diseño del portal" },
+  { id: "personas", rotulo: "Personas inscritas" },
+  { id: "copia", rotulo: "Copia de seguridad" },
+  { id: "cuenta", rotulo: "Cuenta de administrador" }
+];
+
+function toast(texto) {
+  const d = document.createElement("div");
+  d.className = "aviso-flotante";
+  d.textContent = texto;
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 2200);
+}
+const guardar = (t) => { guardarCursos(cursos); if (t !== false) toast("Cambios guardados"); };
+const cursoPorId = id => cursos.find(c => c.id === id);
+
+/* ------------------------- Acceso ------------------------- */
+async function credencialesAdmin() {
+  let a = leerJSON(K.admin, null);
+  if (!a) {
+    a = { correo: ADMIN_INICIAL.correo, clave: await cifrar(ADMIN_INICIAL.clave), creado: new Date().toISOString(), inicial: true };
+    guardarJSON(K.admin, a);
+  }
+  return a;
+}
+
+$("#form-admin").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const a = await credencialesAdmin();
+  const correo = $("#a-correo").value.trim().toLowerCase();
+  const clave = await cifrar($("#a-clave").value);
+  if (correo !== a.correo.toLowerCase() || clave !== a.clave) {
+    $("#msg").innerHTML = '<div class="aviso">Usuario o contraseña incorrectos.</div>';
+    return;
+  }
+  almacen.escribir(K.sesionAdmin, "1");
+  abrirPanel();
+});
+
+function abrirPanel() {
+  cursos = cargarCursos();
+  tema = cargarTema();
+  $("#vista-acceso").classList.add("oculto");
+  $("#vista-panel").classList.remove("oculto");
+  pintarNav();
+  irA("cursos");
+}
+
+$("#btn-salir").onclick = () => {
+  almacen.borrar(K.sesionAdmin);
+  $("#vista-panel").classList.add("oculto");
+  $("#vista-acceso").classList.remove("oculto");
+  $("#form-admin").reset();
+  $("#msg").innerHTML = "";
+};
+$("#btn-ver-portal").onclick = () => window.open("index.html", "_blank");
+
+function pintarNav() {
+  $("#nav").innerHTML = SECCIONES.map(s =>
+    `<button data-sec="${s.id}" ${vista.seccion === s.id || (s.id === "cursos" && ["curso", "leccion", "examen"].includes(vista.seccion)) ? 'aria-current="true"' : ""}>${s.rotulo}</button>`).join("");
+  $$("#nav [data-sec]").forEach(b => b.onclick = () => irA(b.dataset.sec));
+}
+
+function irA(seccion, extra) {
+  vista = { seccion, ...(extra || {}) };
+  pintarNav();
+  ({ cursos: pintarCursos, curso: pintarCurso, leccion: pintarLeccion, examen: pintarExamen,
+     diseno: pintarDiseno, personas: pintarPersonas, copia: pintarCopia, cuenta: pintarCuenta }[seccion])();
+  window.scrollTo(0, 0);
+}
+
+/* ========================= CURSOS ========================= */
+function pintarCursos() {
+  const filas = cursos.map(c => `<tr>
+    <td><b>${esc(c.titulo)}</b><br><span class="codigo">${esc(c.codigo || "sin código")}</span></td>
+    <td>${(c.modulos || []).length}</td>
+    <td>${contarLecciones(c)}</td>
+    <td>${(c.examen && c.examen.preguntas || []).length}</td>
+    <td><span class="etiqueta ${c.publicado ? "pub" : ""}">${c.publicado ? "Publicado" : "Borrador"}</span></td>
+    <td class="acc">
+      <button class="boton boton--sec boton--min" data-editar="${c.id}">Editar</button>
+      <button class="boton boton--sec boton--min" data-publicar="${c.id}">${c.publicado ? "Despublicar" : "Publicar"}</button>
+      <button class="boton boton--sec boton--min" data-duplicar="${c.id}">Duplicar</button>
+      <button class="boton boton--peligro boton--min" data-eliminar="${c.id}">Eliminar</button>
+    </td></tr>`).join("");
+
+  $("#zona").innerHTML = `
+    <div class="encabezado">
+      <div><h1>Cursos</h1><p>Los cursos publicados aparecen en el portal de aprendices. Los borradores solo se ven aquí.</p></div>
+      <button class="boton" id="btn-nuevo">Crear curso</button>
+    </div>
+    <div class="panel">
+      ${cursos.length ? `<table class="datos"><thead><tr><th>Curso</th><th>Módulos</th><th>Lecciones</th><th>Preguntas del examen</th><th>Estado</th><th></th></tr></thead><tbody>${filas}</tbody></table>`
+        : `<div style="padding:40px;text-align:center;color:var(--gris)">Todavía no hay cursos. Crea el primero.</div>`}
+    </div>`;
+
+  $("#btn-nuevo").onclick = () => {
+    const c = { id: idNuevo("curso"), codigo: "NUEVO-001", titulo: "Curso sin título", version: "1.0",
+      descripcion: "", duracion: "", publicado: false, modulos: [], examen: { codigo: "", minimo: 0, preguntas: [] } };
+    cursos.push(c); guardar(false); irA("curso", { cursoId: c.id });
+  };
+  $$("[data-editar]").forEach(b => b.onclick = () => irA("curso", { cursoId: b.dataset.editar }));
+  $$("[data-publicar]").forEach(b => b.onclick = () => {
+    const c = cursoPorId(b.dataset.publicar);
+    if (!c.publicado && (contarLecciones(c) === 0)) return alert("Agrega al menos una lección antes de publicar el curso.");
+    c.publicado = !c.publicado; guardar(); pintarCursos();
+  });
+  $$("[data-duplicar]").forEach(b => b.onclick = () => {
+    const original = cursoPorId(b.dataset.duplicar);
+    const copia = JSON.parse(JSON.stringify(original));
+    copia.id = idNuevo("curso");
+    copia.titulo = original.titulo + " (copia)";
+    copia.publicado = false;
+    copia.modulos.forEach(m => { m.id = idNuevo("mod"); m.lecciones.forEach(l => l.id = idNuevo("lec")); });
+    cursos.push(copia); guardar(); pintarCursos();
+  });
+  $$("[data-eliminar]").forEach(b => b.onclick = () => {
+    const c = cursoPorId(b.dataset.eliminar);
+    if (!confirm(`Se eliminará el curso "${c.titulo}" con sus ${contarLecciones(c)} lecciones. El avance de los aprendices en este curso queda huérfano. ¿Continuar?`)) return;
+    cursos = cursos.filter(x => x.id !== c.id); guardar(); pintarCursos();
+  });
+}
+
+/* ---------------------- Editor de curso ---------------------- */
+function recogerCurso(c) {
+  c.titulo = $("#c-titulo").value.trim() || "Curso sin título";
+  c.codigo = $("#c-codigo").value.trim();
+  c.version = $("#c-version").value.trim() || "1.0";
+  c.duracion = $("#c-duracion").value.trim();
+  c.descripcion = $("#c-descripcion").value.trim();
+}
+
+function pintarCurso() {
+  const c = cursoPorId(vista.cursoId);
+  if (!c) return irA("cursos");
+
+  const modulos = (c.modulos || []).map((m, i) => `
+    <div class="modulo">
+      <div class="modulo__cabeza">
+        <span class="modulo__num">M${i + 1}</span>
+        <input value="${esc(m.titulo)}" data-mod-titulo="${m.id}" aria-label="Título del módulo">
+        <button class="boton boton--sec boton--min" data-mod-sube="${m.id}" ${i === 0 ? "disabled" : ""}>↑</button>
+        <button class="boton boton--sec boton--min" data-mod-baja="${m.id}" ${i === c.modulos.length - 1 ? "disabled" : ""}>↓</button>
+        <button class="boton boton--peligro boton--min" data-mod-borra="${m.id}">Eliminar</button>
+      </div>
+      <div style="padding:8px 14px 4px 30px"><input style="width:100%;border:1px solid var(--linea);border-radius:3px;padding:7px 9px;font-size:13.5px" placeholder="Resumen del módulo (se muestra en la ruta del curso)" value="${esc(m.resumen || "")}" data-mod-resumen="${m.id}"></div>
+      ${(m.lecciones || []).map((l, j) => `
+        <div class="leccion-fila">
+          <span class="codigo">${esc(l.codigo || "—")}</span>
+          <span class="tit">${esc(l.titulo)}</span>
+          <span style="font-size:12.5px;color:var(--gris-claro)">${(l.preguntas || []).length} preg.</span>
+          <span class="acc">
+            <button class="boton boton--sec boton--min" data-lec-sube="${m.id}|${l.id}" ${j === 0 ? "disabled" : ""}>↑</button>
+            <button class="boton boton--sec boton--min" data-lec-baja="${m.id}|${l.id}" ${j === m.lecciones.length - 1 ? "disabled" : ""}>↓</button>
+            <button class="boton boton--sec boton--min" data-lec-edita="${m.id}|${l.id}">Editar</button>
+            <button class="boton boton--peligro boton--min" data-lec-borra="${m.id}|${l.id}">Eliminar</button>
+          </span>
+        </div>`).join("")}
+      <div class="modulo__pie"><button class="boton boton--sec boton--min" data-lec-nueva="${m.id}">Agregar lección</button></div>
+    </div>`).join("");
+
+  $("#zona").innerHTML = `
+    <div class="encabezado">
+      <div>
+        <p style="font-size:13px;color:var(--gris);margin:0 0 6px"><button class="boton boton--sec boton--min" id="volver">← Cursos</button></p>
+        <h1>${esc(c.titulo)}</h1>
+        <p>${contarLecciones(c)} lecciones en ${(c.modulos || []).length} módulos · <span class="etiqueta ${c.publicado ? "pub" : ""}">${c.publicado ? "Publicado" : "Borrador"}</span></p>
+      </div>
+      <button class="boton" id="btn-guardar-curso">Guardar curso</button>
+    </div>
+
+    <div class="bloque">
+      <h2>Datos del curso</h2>
+      <p class="desc">Se muestran en el catálogo del portal y en la constancia.</p>
+      <div class="rejilla">
+        <div class="campo"><label for="c-titulo">Título</label><input id="c-titulo" value="${esc(c.titulo)}"></div>
+        <div class="campo"><label for="c-codigo">Código</label><input id="c-codigo" value="${esc(c.codigo || "")}" placeholder="IND-SIGC-2026"></div>
+      </div>
+      <div class="rejilla">
+        <div class="campo"><label for="c-version">Versión</label><input id="c-version" value="${esc(c.version || "1.0")}"></div>
+        <div class="campo"><label for="c-duracion">Duración estimada</label><input id="c-duracion" value="${esc(c.duracion || "")}" placeholder="90 minutos"></div>
+      </div>
+      <div class="campo"><label for="c-descripcion">Descripción</label><textarea id="c-descripcion" rows="3">${esc(c.descripcion || "")}</textarea></div>
+    </div>
+
+    <div class="bloque">
+      <h2>Módulos y lecciones</h2>
+      <p class="desc">El orden es el que verán los aprendices. Guarda el curso antes de salir para conservar los títulos editados aquí.</p>
+      ${modulos || '<p style="color:var(--gris)">Este curso todavía no tiene módulos.</p>'}
+      <button class="boton boton--sec" id="btn-mod-nuevo">Agregar módulo</button>
+    </div>
+
+    <div class="bloque">
+      <h2>Evaluación final</h2>
+      <p class="desc">${(c.examen && c.examen.preguntas || []).length} preguntas · mínimo para aprobar: ${(c.examen && c.examen.minimo) || 0}</p>
+      <button class="boton boton--sec" id="btn-examen">Editar la evaluación</button>
+    </div>`;
+
+  $("#volver").onclick = () => { recogerCurso(c); guardar(false); irA("cursos"); };
+  $("#btn-guardar-curso").onclick = () => { recogerCurso(c); guardar(); pintarCurso(); };
+  $("#btn-examen").onclick = () => { recogerCurso(c); guardar(false); irA("examen", { cursoId: c.id }); };
+
+  $("#btn-mod-nuevo").onclick = () => {
+    recogerCurso(c);
+    c.modulos.push({ id: idNuevo("mod"), titulo: "Módulo sin título", resumen: "", lecciones: [] });
+    guardar(false); pintarCurso();
+  };
+  $$("[data-mod-titulo]").forEach(i => i.onchange = () => { c.modulos.find(m => m.id === i.dataset.modTitulo).titulo = i.value.trim() || "Módulo sin título"; guardar(); });
+  $$("[data-mod-resumen]").forEach(i => i.onchange = () => { c.modulos.find(m => m.id === i.dataset.modResumen).resumen = i.value.trim(); guardar(); });
+  const mover = (arr, i, d) => { const x = arr.splice(i, 1)[0]; arr.splice(i + d, 0, x); };
+  $$("[data-mod-sube]").forEach(b => b.onclick = () => { recogerCurso(c); mover(c.modulos, c.modulos.findIndex(m => m.id === b.dataset.modSube), -1); guardar(false); pintarCurso(); });
+  $$("[data-mod-baja]").forEach(b => b.onclick = () => { recogerCurso(c); mover(c.modulos, c.modulos.findIndex(m => m.id === b.dataset.modBaja), 1); guardar(false); pintarCurso(); });
+  $$("[data-mod-borra]").forEach(b => b.onclick = () => {
+    const m = c.modulos.find(x => x.id === b.dataset.modBorra);
+    if (!confirm(`Se eliminará el módulo "${m.titulo}" con sus ${m.lecciones.length} lecciones. ¿Continuar?`)) return;
+    recogerCurso(c); c.modulos = c.modulos.filter(x => x.id !== m.id); guardar(); pintarCurso();
+  });
+
+  const par = v => v.split("|");
+  $$("[data-lec-nueva]").forEach(b => b.onclick = () => {
+    recogerCurso(c);
+    const m = c.modulos.find(x => x.id === b.dataset.lecNueva);
+    const l = { id: idNuevo("lec"), codigo: "", titulo: "Lección sin título", objetivo: "", html: "<p>Escribe aquí el contenido de la lección.</p>", preguntas: [] };
+    m.lecciones.push(l); guardar(false);
+    irA("leccion", { cursoId: c.id, moduloId: m.id, leccionId: l.id });
+  });
+  $$("[data-lec-edita]").forEach(b => b.onclick = () => {
+    recogerCurso(c); guardar(false);
+    const [mid, lid] = par(b.dataset.lecEdita);
+    irA("leccion", { cursoId: c.id, moduloId: mid, leccionId: lid });
+  });
+  $$("[data-lec-sube]").forEach(b => b.onclick = () => {
+    const [mid, lid] = par(b.dataset.lecSube); const m = c.modulos.find(x => x.id === mid);
+    recogerCurso(c); mover(m.lecciones, m.lecciones.findIndex(l => l.id === lid), -1); guardar(false); pintarCurso();
+  });
+  $$("[data-lec-baja]").forEach(b => b.onclick = () => {
+    const [mid, lid] = par(b.dataset.lecBaja); const m = c.modulos.find(x => x.id === mid);
+    recogerCurso(c); mover(m.lecciones, m.lecciones.findIndex(l => l.id === lid), 1); guardar(false); pintarCurso();
+  });
+  $$("[data-lec-borra]").forEach(b => b.onclick = () => {
+    const [mid, lid] = par(b.dataset.lecBorra); const m = c.modulos.find(x => x.id === mid);
+    const l = m.lecciones.find(x => x.id === lid);
+    if (!confirm(`Se eliminará la lección "${l.titulo}". ¿Continuar?`)) return;
+    recogerCurso(c); m.lecciones = m.lecciones.filter(x => x.id !== lid); guardar(); pintarCurso();
+  });
+}
+
+/* ---------------------- Editor de preguntas ---------------------- */
+function htmlPreguntas(lista, prefijo) {
+  if (!lista.length) return '<p style="color:var(--gris);font-size:14px">Sin preguntas todavía.</p>';
+  return lista.map((p, i) => `
+    <div class="pregunta-ed" data-preg="${i}">
+      <div class="campo"><label>Pregunta ${i + 1}</label>
+        <input type="text" data-q="${i}" value="${esc(p.q)}" placeholder="Enunciado"></div>
+      ${p.ops.map((o, j) => `<div class="fila-op">
+        <input type="text" data-op="${i}|${j}" value="${esc(o)}" placeholder="Opción ${j + 1}">
+        <label><input type="radio" name="${prefijo}-r-${i}" data-r="${i}|${j}" ${p.r === j ? "checked" : ""}> correcta</label>
+        <button class="boton boton--peligro boton--min" data-op-borra="${i}|${j}" ${p.ops.length <= 2 ? "disabled" : ""}>×</button>
+      </div>`).join("")}
+      <div class="pila" style="margin:8px 0 12px">
+        <button class="boton boton--sec boton--min" data-op-nueva="${i}" ${p.ops.length >= 6 ? "disabled" : ""}>Agregar opción</button>
+      </div>
+      <div class="campo"><label>Explicación que se muestra al responder</label>
+        <textarea rows="2" data-exp="${i}">${esc(p.exp || "")}</textarea></div>
+      <div class="pila">
+        <button class="boton boton--sec boton--min" data-preg-sube="${i}" ${i === 0 ? "disabled" : ""}>↑</button>
+        <button class="boton boton--sec boton--min" data-preg-baja="${i}" ${i === lista.length - 1 ? "disabled" : ""}>↓</button>
+        <button class="boton boton--peligro boton--min" data-preg-borra="${i}">Eliminar pregunta</button>
+      </div>
+    </div>`).join("");
+}
+
+function recogerPreguntas(lista) {
+  $$("[data-q]").forEach(i => lista[+i.dataset.q].q = i.value.trim());
+  $$("[data-op]").forEach(i => { const [a, b] = i.dataset.op.split("|"); lista[+a].ops[+b] = i.value.trim(); });
+  $$("[data-exp]").forEach(i => lista[+i.dataset.exp].exp = i.value.trim());
+  $$("[data-r]:checked").forEach(i => { const [a, b] = i.dataset.r.split("|"); lista[+a].r = +b; });
+}
+
+function conectarPreguntas(lista, repintar) {
+  const mover = (i, d) => { const x = lista.splice(i, 1)[0]; lista.splice(i + d, 0, x); };
+  $$("[data-op-nueva]").forEach(b => b.onclick = () => { recogerPreguntas(lista); lista[+b.dataset.opNueva].ops.push(""); repintar(); });
+  $$("[data-op-borra]").forEach(b => b.onclick = () => {
+    const [a, j] = b.dataset.opBorra.split("|").map(Number);
+    recogerPreguntas(lista);
+    lista[a].ops.splice(j, 1);
+    if (lista[a].r >= lista[a].ops.length) lista[a].r = 0;
+    repintar();
+  });
+  $$("[data-preg-sube]").forEach(b => b.onclick = () => { recogerPreguntas(lista); mover(+b.dataset.pregSube, -1); repintar(); });
+  $$("[data-preg-baja]").forEach(b => b.onclick = () => { recogerPreguntas(lista); mover(+b.dataset.pregBaja, 1); repintar(); });
+  $$("[data-preg-borra]").forEach(b => b.onclick = () => {
+    if (!confirm("¿Eliminar esta pregunta?")) return;
+    recogerPreguntas(lista); lista.splice(+b.dataset.pregBorra, 1); repintar();
+  });
+}
+
+const preguntaNueva = () => ({ q: "Nueva pregunta", ops: ["Opción 1", "Opción 2", "Opción 3"], r: 0, exp: "" });
+
+/* ---------------------- Editor de lección ---------------------- */
+function pintarLeccion() {
+  const c = cursoPorId(vista.cursoId);
+  const m = c && c.modulos.find(x => x.id === vista.moduloId);
+  const l = m && m.lecciones.find(x => x.id === vista.leccionId);
+  if (!l) return irA("cursos");
+
+  const recoger = () => {
+    l.codigo = $("#l-codigo").value.trim();
+    l.titulo = $("#l-titulo").value.trim() || "Lección sin título";
+    l.objetivo = $("#l-objetivo").value.trim();
+    l.html = $("#l-html").value;
+    recogerPreguntas(l.preguntas);
+  };
+  const repintar = () => { guardar(false); pintarLeccion(); };
+
+  $("#zona").innerHTML = `
+    <div class="encabezado">
+      <div>
+        <p style="font-size:13px;color:var(--gris);margin:0 0 6px"><button class="boton boton--sec boton--min" id="volver">← ${esc(c.titulo)}</button></p>
+        <h1>Editar lección</h1>
+        <p>Módulo: ${esc(m.titulo)}</p>
+      </div>
+      <button class="boton" id="btn-guardar">Guardar lección</button>
+    </div>
+
+    <div class="bloque">
+      <div class="rejilla">
+        <div class="campo"><label for="l-codigo">Código</label><input id="l-codigo" value="${esc(l.codigo || "")}" placeholder="IND-SIGC-L01"></div>
+        <div class="campo"><label for="l-titulo">Título</label><input id="l-titulo" value="${esc(l.titulo)}"></div>
+      </div>
+      <div class="campo"><label for="l-objetivo">Objetivo de aprendizaje</label><input id="l-objetivo" value="${esc(l.objetivo || "")}" placeholder="Lo que la persona podrá hacer al terminar"></div>
+      <div class="campo">
+        <label for="l-html">Contenido</label>
+        <textarea id="l-html" rows="16" style="font-family:var(--mono);font-size:13px;line-height:1.5">${esc(l.html || "")}</textarea>
+        <p class="pista">Se admite HTML: &lt;p&gt;, &lt;h3&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;table&gt;, &lt;strong&gt;, &lt;svg&gt;. Para destacar un recuadro azul usa &lt;div class="destacado"&gt;…&lt;/div&gt; y para un pendiente institucional &lt;div class="pendiente"&gt;…&lt;/div&gt;.</p>
+      </div>
+      <div class="pila">
+        <button class="boton boton--sec boton--min" id="btn-previa">Ver vista previa</button>
+      </div>
+      <div id="previa" class="oculto" style="border:1px solid var(--linea);padding:16px;margin-top:12px;background:#fff"></div>
+    </div>
+
+    <div class="bloque">
+      <h2>Preguntas de comprobación</h2>
+      <p class="desc">La lección se marca como vista cuando el aprendiz responde todas correctamente. Si no defines preguntas, aparecerá un botón para marcarla como vista.</p>
+      <div id="preguntas">${htmlPreguntas(l.preguntas, "lec")}</div>
+      <button class="boton boton--sec" id="btn-preg-nueva">Agregar pregunta</button>
+    </div>`;
+
+  $("#volver").onclick = () => { recoger(); guardar(false); irA("curso", { cursoId: c.id }); };
+  $("#btn-guardar").onclick = () => { recoger(); guardar(); pintarLeccion(); };
+  $("#btn-preg-nueva").onclick = () => { recoger(); l.preguntas.push(preguntaNueva()); repintar(); };
+  $("#btn-previa").onclick = () => {
+    const p = $("#previa");
+    p.classList.toggle("oculto");
+    if (!p.classList.contains("oculto")) p.innerHTML = $("#l-html").value;
+  };
+  conectarPreguntas(l.preguntas, repintar);
+}
+
+/* ---------------------- Editor de evaluación ---------------------- */
+function pintarExamen() {
+  const c = cursoPorId(vista.cursoId);
+  if (!c) return irA("cursos");
+  if (!c.examen) c.examen = { codigo: "", minimo: 0, preguntas: [] };
+  const e = c.examen;
+
+  const recoger = () => {
+    e.codigo = $("#e-codigo").value.trim();
+    e.minimo = Math.max(0, Math.min(Number($("#e-minimo").value) || 0, e.preguntas.length));
+    recogerPreguntas(e.preguntas);
+  };
+  const repintar = () => { guardar(false); pintarExamen(); };
+
+  $("#zona").innerHTML = `
+    <div class="encabezado">
+      <div>
+        <p style="font-size:13px;color:var(--gris);margin:0 0 6px"><button class="boton boton--sec boton--min" id="volver">← ${esc(c.titulo)}</button></p>
+        <h1>Evaluación final</h1>
+        <p>Se habilita para el aprendiz cuando completa todas las lecciones del curso.</p>
+      </div>
+      <button class="boton" id="btn-guardar">Guardar evaluación</button>
+    </div>
+    <div class="bloque">
+      <div class="rejilla">
+        <div class="campo"><label for="e-codigo">Código</label><input id="e-codigo" value="${esc(e.codigo || "")}" placeholder="IND-SIGC-EV"></div>
+        <div class="campo"><label for="e-minimo">Respuestas correctas para aprobar</label>
+          <input id="e-minimo" type="number" min="0" max="${e.preguntas.length}" value="${e.minimo || 0}">
+          <p class="pista">De ${e.preguntas.length} preguntas. Si queda en 0, el portal exige el 75 %.</p></div>
+      </div>
+    </div>
+    <div class="bloque">
+      <h2>Preguntas</h2>
+      <div id="preguntas">${htmlPreguntas(e.preguntas, "ex")}</div>
+      <button class="boton boton--sec" id="btn-preg-nueva">Agregar pregunta</button>
+    </div>`;
+
+  $("#volver").onclick = () => { recoger(); guardar(false); irA("curso", { cursoId: c.id }); };
+  $("#btn-guardar").onclick = () => { recoger(); guardar(); pintarExamen(); };
+  $("#btn-preg-nueva").onclick = () => { recoger(); e.preguntas.push(preguntaNueva()); repintar(); };
+  conectarPreguntas(e.preguntas, repintar);
+}
+
+/* ========================= DISEÑO ========================= */
+const CAMPOS_COLOR = [
+  ["azul900", "Azul profundo", "Barra superior, fondo del acceso"],
+  ["azul800", "Azul institucional", "Botones y títulos"],
+  ["azul600", "Azul medio", "Enlaces y acentos"],
+  ["cian", "Cian", "Barra de avance y marcadores"],
+  ["dorado", "Dorado", "Logros y bloques pendientes"],
+  ["papel", "Fondo de lectura", "Lienzo del portal"],
+  ["tinta", "Texto principal", "Color base del texto"],
+  ["linea", "Líneas y bordes", "Separadores y tablas"],
+  ["exito", "Confirmación", "Respuestas correctas"],
+  ["alerta", "Advertencia", "Errores y avisos"]
+];
+
+function pintarDiseno() {
+  const t = tema;
+  const colores = CAMPOS_COLOR.map(([k, rotulo, ayuda]) => `
+    <div class="color-fila">
+      <label for="col-${k}" title="${esc(ayuda)}">${rotulo}</label>
+      <input type="color" id="col-${k}" value="${t.colores[k]}" data-color="${k}">
+      <input type="text" value="${t.colores[k].toUpperCase()}" data-hex="${k}" maxlength="7" aria-label="Código hexadecimal de ${rotulo}">
+      <span style="font-size:12.5px;color:var(--gris-claro)">${esc(ayuda)}</span>
+    </div>`).join("");
+
+  $("#zona").innerHTML = `
+    <div class="encabezado">
+      <div><h1>Diseño del portal</h1><p>Cambia colores, tipografías y textos de marca del portal de aprendices. La vista previa se actualiza mientras editas; los cambios se aplican al guardar.</p></div>
+      <div class="pila" style="margin:0">
+        <button class="boton boton--sec" id="btn-fabrica">Restablecer</button>
+        <button class="boton" id="btn-guardar-tema">Guardar diseño</button>
+      </div>
+    </div>
+
+    <div class="rejilla" style="align-items:start">
+      <div>
+        <div class="bloque">
+          <h2>Paleta</h2>
+          <p class="desc">Puedes usar el selector o escribir el código hexadecimal exacto de la identidad institucional.</p>
+          ${colores}
+        </div>
+
+        <div class="bloque">
+          <h2>Tipografía</h2>
+          <p class="desc">Las familias se cargan desde Google Fonts.</p>
+          <div class="rejilla">
+            <div class="campo"><label for="f-interfaz">Interfaz y titulares</label>
+              <select id="f-interfaz">${FUENTES_INTERFAZ.map(f => `<option ${f === t.tipografia.interfaz ? "selected" : ""}>${f}</option>`).join("")}</select></div>
+            <div class="campo"><label for="f-lectura">Cuerpo de las lecciones</label>
+              <select id="f-lectura">${FUENTES_LECTURA.map(f => `<option ${f === t.tipografia.lectura ? "selected" : ""}>${f}</option>`).join("")}</select></div>
+          </div>
+          <div class="rejilla--3 rejilla">
+            <div class="campo"><label for="t-base">Tamaño base (px)</label><input id="t-base" type="number" min="14" max="20" step="0.5" value="${t.tipografia.tamanoBase}"></div>
+            <div class="campo"><label for="t-lectura">Tamaño de lectura (px)</label><input id="t-lectura" type="number" min="15" max="22" step="0.5" value="${t.tipografia.tamanoLectura}"></div>
+            <div class="campo"><label for="t-radio">Redondeo (px)</label><input id="t-radio" type="number" min="0" max="16" value="${t.radio}"></div>
+          </div>
+        </div>
+
+        <div class="bloque">
+          <h2>Textos de marca</h2>
+          <div class="campo"><label for="m-entidad">Entidad</label><input id="m-entidad" value="${esc(t.entidad)}"></div>
+          <div class="campo"><label for="m-dependencia">Dependencia responsable</label><input id="m-dependencia" value="${esc(t.dependencia)}"></div>
+          <div class="campo"><label for="m-nombre">Nombre del portal</label><input id="m-nombre" value="${esc(t.nombrePortal)}"></div>
+          <div class="campo"><label for="m-lema">Texto de la portada</label><textarea id="m-lema" rows="4">${esc(t.lema)}</textarea></div>
+          <div class="campo"><label for="m-pie">Nota al pie de la portada</label><textarea id="m-pie" rows="2">${esc(t.notaPie)}</textarea></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="bloque" style="position:sticky;top:16px">
+          <h2>Vista previa</h2>
+          <p class="desc">Aproximación de cómo se verá el portal de aprendices.</p>
+          <div class="muestra" id="muestra"></div>
+        </div>
+      </div>
+    </div>`;
+
+  const borrador = JSON.parse(JSON.stringify(t));
+
+  function previa() {
+    const m = $("#muestra");
+    const c = borrador.colores, tp = borrador.tipografia;
+    m.style.setProperty("--azul-900", c.azul900);
+    m.style.setProperty("--azul-800", c.azul800);
+    m.style.setProperty("--azul-600", c.azul600);
+    m.style.setProperty("--cian", c.cian);
+    m.style.setProperty("--papel", c.papel);
+    m.style.setProperty("--tinta", c.tinta);
+    m.style.setProperty("--linea", c.linea);
+    m.innerHTML = `
+      <div class="muestra__barra" style="font-family:'${tp.interfaz}',sans-serif">${esc(borrador.nombrePortal)}</div>
+      <div class="muestra__avance"><i></i></div>
+      <div class="muestra__cuerpo" style="font-family:'${tp.interfaz}',sans-serif;font-size:${tp.tamanoBase}px">
+        <span class="muestra__placa" style="border-radius:${borrador.radio}px">IND-SIGC-L04</span>
+        <h3>La política de calidad</h3>
+        <p class="lect" style="font-family:'${tp.lectura}',Georgia,serif;font-size:${tp.tamanoLectura}px;line-height:1.6;color:${c.tinta}">
+          La política de calidad es la declaración aprobada por la alta dirección que fija el compromiso de la ${esc(borrador.entidad)} y da el marco para definir los objetivos.</p>
+        <span class="btn" style="border-radius:${borrador.radio}px">Comprobar respuestas</span>
+        <div class="destac" style="border-left-color:${c.azul600}">Una prueba sencilla: si al leer la política no puedes nombrar algo que harás distinto, todavía no está desplegada.</div>
+        <div style="border:1px dashed ${c.dorado};background:#FEF8E9;color:#6B4E06;padding:10px 12px;font-size:13px;margin-top:10px">Texto pendiente de reemplazo por la versión oficial: <b>[Pendiente]</b></div>
+      </div>`;
+    const enlace = document.getElementById("fuentes-previa") || Object.assign(document.head.appendChild(document.createElement("link")), { id: "fuentes-previa", rel: "stylesheet" });
+    enlace.href = urlFuentes(tp.interfaz, tp.lectura);
+  }
+  previa();
+
+  const validoHex = v => /^#[0-9A-Fa-f]{6}$/.test(v);
+  CAMPOS_COLOR.forEach(([k]) => {
+    const sel = $(`[data-color="${k}"]`), hex = $(`[data-hex="${k}"]`);
+    sel.oninput = () => { borrador.colores[k] = sel.value; hex.value = sel.value.toUpperCase(); previa(); };
+    hex.oninput = () => {
+      const v = hex.value.trim();
+      if (validoHex(v)) { borrador.colores[k] = v; sel.value = v; hex.style.borderColor = "var(--linea)"; previa(); }
+      else hex.style.borderColor = "var(--alerta)";
+    };
+  });
+  const enlazar = (id, aplicar) => { const el = $(id); el.oninput = el.onchange = () => { aplicar(el.value); previa(); }; };
+  enlazar("#f-interfaz", v => borrador.tipografia.interfaz = v);
+  enlazar("#f-lectura", v => borrador.tipografia.lectura = v);
+  enlazar("#t-base", v => borrador.tipografia.tamanoBase = Number(v) || 16);
+  enlazar("#t-lectura", v => borrador.tipografia.tamanoLectura = Number(v) || 17.5);
+  enlazar("#t-radio", v => borrador.radio = Number(v) || 0);
+  enlazar("#m-entidad", v => borrador.entidad = v);
+  enlazar("#m-dependencia", v => borrador.dependencia = v);
+  enlazar("#m-nombre", v => borrador.nombrePortal = v);
+  enlazar("#m-lema", v => borrador.lema = v);
+  enlazar("#m-pie", v => borrador.notaPie = v);
+
+  $("#btn-guardar-tema").onclick = () => {
+    const malos = CAMPOS_COLOR.filter(([k]) => !validoHex(borrador.colores[k]));
+    if (malos.length) return alert("Revisa estos colores, el código hexadecimal no es válido: " + malos.map(m => m[1]).join(", "));
+    tema = borrador; guardarTema(tema); toast("Diseño guardado y aplicado al portal");
+  };
+  $("#btn-fabrica").onclick = () => {
+    if (!confirm("Se restablecen los colores, tipografías y textos de marca originales. ¿Continuar?")) return;
+    almacen.borrar(K.tema); tema = cargarTema(); pintarDiseno(); toast("Diseño restablecido");
+  };
+}
+
+/* ========================= PERSONAS ========================= */
+function pintarPersonas() {
+  const usuarios = Object.values(leerJSON(K.usuarios, {}));
+  const publicados = cursos.filter(c => c.publicado !== false);
+
+  const resumen = u => {
+    const av = leerJSON(K.avance + u.correo, {});
+    return publicados.map(c => {
+      const a = av[c.id] || { lecciones: {}, examen: null };
+      const hechas = Object.keys(a.lecciones || {}).length;
+      const total = contarLecciones(c);
+      const estado = a.examen && a.examen.aprobado ? "aprobado" : hechas === 0 ? "sin iniciar" : hechas + "/" + total;
+      return { curso: c, hechas, total, estado };
+    });
+  };
+
+  const filas = usuarios.map(u => {
+    const r = resumen(u);
+    return `<tr>
+      <td><b>${esc(u.nombre)}</b><br><span style="font-size:12.5px;color:var(--gris)">${esc(u.correo)}</span></td>
+      <td>${esc(u.dependencia)}<br><span style="font-size:12.5px;color:var(--gris)">${esc(u.cargo)}</span></td>
+      <td>${r.map(x => `${esc(x.curso.codigo || x.curso.titulo)}: ${x.estado}`).join("<br>") || "—"}</td>
+      <td>${new Date(u.creado).toLocaleDateString("es-CO")}</td>
+      <td class="acc"><button class="boton boton--peligro boton--min" data-borrar-u="${esc(u.correo)}">Eliminar</button></td>
+    </tr>`;
+  }).join("");
+
+  $("#zona").innerHTML = `
+    <div class="encabezado">
+      <div><h1>Personas inscritas</h1><p>Cuentas registradas en este navegador. En una instalación con autenticación institucional, esta lista vendría del directorio de la Universidad.</p></div>
+      <button class="boton boton--sec" id="btn-csv" ${usuarios.length ? "" : "disabled"}>Descargar CSV</button>
+    </div>
+    <div class="panel">
+      ${usuarios.length ? `<table class="datos"><thead><tr><th>Persona</th><th>Dependencia y cargo</th><th>Avance</th><th>Registro</th><th></th></tr></thead><tbody>${filas}</tbody></table>`
+        : '<div style="padding:40px;text-align:center;color:var(--gris)">Todavía no hay personas registradas en este equipo.</div>'}
+    </div>`;
+
+  $$("[data-borrar-u]").forEach(b => b.onclick = () => {
+    const correo = b.dataset.borrarU;
+    if (!confirm("Se eliminará la cuenta de " + correo + " y su avance. ¿Continuar?")) return;
+    const us = leerJSON(K.usuarios, {});
+    delete us[correo]; guardarJSON(K.usuarios, us); almacen.borrar(K.avance + correo);
+    pintarPersonas(); toast("Cuenta eliminada");
+  });
+
+  $("#btn-csv").onclick = () => {
+    const cab = ["Nombre", "Correo", "Dependencia", "Cargo", "Registro", ...publicados.map(c => c.codigo || c.titulo)];
+    const lineas = usuarios.map(u => {
+      const r = resumen(u);
+      return [u.nombre, u.correo, u.dependencia, u.cargo, new Date(u.creado).toLocaleDateString("es-CO"), ...r.map(x => x.estado)]
+        .map(v => '"' + String(v).replace(/"/g, '""') + '"').join(";");
+    });
+    const csv = "\uFEFF" + [cab.join(";"), ...lineas].join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = "inscritos-sigc.csv"; a.click(); URL.revokeObjectURL(a.href);
+  };
+}
+
+/* ========================= COPIA DE SEGURIDAD ========================= */
+function pintarCopia() {
+  $("#zona").innerHTML = `
+    <div class="encabezado"><div><h1>Copia de seguridad</h1>
+      <p>Los cursos y el diseño viven en el navegador de este equipo. Exporta un respaldo antes de cambios grandes y para llevar el contenido a otro computador o al repositorio de GitHub.</p></div></div>
+    <div class="bloque">
+      <h2>Exportar</h2>
+      <p class="desc">Genera un archivo con todos los cursos y la configuración de diseño.</p>
+      <button class="boton" id="btn-exp">Descargar respaldo</button>
+    </div>
+    <div class="bloque">
+      <h2>Importar</h2>
+      <p class="desc">Reemplaza los cursos y el diseño actuales por los del archivo. Las cuentas y el avance de los aprendices no se tocan.</p>
+      <div class="campo"><input type="file" id="arch" accept="application/json"></div>
+      <button class="boton boton--sec" id="btn-imp">Importar respaldo</button>
+      <div id="msg-imp" style="margin-top:12px"></div>
+    </div>
+    <div class="bloque">
+      <h2>Publicar el contenido en GitHub</h2>
+      <p class="desc">Para que todos los aprendices vean estos cursos sin importar el equipo, abre <code>datos.js</code> en el repositorio, reemplaza el contenido de <code>CURSO_SEMILLA</code> por el del respaldo y sube el cambio. El respaldo incluye el JSON listo para copiar.</p>
+    </div>`;
+
+  $("#btn-exp").onclick = () => {
+    const datos = { version: 1, generado: new Date().toISOString(), cursos, tema: cargarTema() };
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(datos, null, 2)], { type: "application/json" }));
+    a.download = "respaldo-portal-sigc.json"; a.click(); URL.revokeObjectURL(a.href);
+  };
+
+  $("#btn-imp").onclick = () => {
+    const f = $("#arch").files[0];
+    if (!f) return ($("#msg-imp").innerHTML = '<div class="aviso">Selecciona primero un archivo.</div>');
+    const lector = new FileReader();
+    lector.onload = () => {
+      try {
+        const d = JSON.parse(lector.result);
+        if (!Array.isArray(d.cursos)) throw new Error("El archivo no contiene una lista de cursos.");
+        if (!confirm("Se reemplazarán " + cursos.length + " cursos por " + d.cursos.length + ". ¿Continuar?")) return;
+        cursos = d.cursos; guardarCursos(cursos);
+        if (d.tema) { guardarTema(d.tema); tema = cargarTema(); }
+        $("#msg-imp").innerHTML = '<div class="aviso aviso--ok">Respaldo importado.</div>';
+        toast("Contenido importado");
+      } catch (e) {
+        $("#msg-imp").innerHTML = '<div class="aviso">No se pudo leer el archivo: ' + esc(e.message) + '</div>';
+      }
+    };
+    lector.readAsText(f);
+  };
+}
+
+/* ========================= CUENTA ========================= */
+function pintarCuenta() {
+  const a = leerJSON(K.admin, {});
+  $("#zona").innerHTML = `
+    <div class="encabezado"><div><h1>Cuenta de administrador</h1>
+      <p>Estas credenciales dan acceso a la edición de cursos y del diseño. Cámbialas apenas termines la instalación.</p></div></div>
+    <div class="bloque" style="max-width:520px">
+      ${a.inicial ? '<div class="aviso">Sigues usando la contraseña inicial de instalación. Cámbiala ahora.</div>' : ""}
+      <div id="msg-cuenta"></div>
+      <div class="campo"><label for="q-correo">Usuario</label><input id="q-correo" value="${esc(a.correo || "")}"></div>
+      <div class="campo"><label for="q-actual">Contraseña actual</label><input id="q-actual" type="password" autocomplete="current-password"></div>
+      <div class="campo"><label for="q-nueva">Contraseña nueva</label><input id="q-nueva" type="password" autocomplete="new-password"><p class="pista">Mínimo 10 caracteres.</p></div>
+      <div class="campo"><label for="q-nueva2">Repite la contraseña nueva</label><input id="q-nueva2" type="password" autocomplete="new-password"></div>
+      <button class="boton" id="btn-cuenta">Actualizar credenciales</button>
+    </div>
+    <div class="bloque" style="max-width:520px">
+      <h2>Sobre la seguridad de este acceso</h2>
+      <p class="desc" style="margin:0">La verificación ocurre en el navegador, así que este acceso protege frente al uso casual, no frente a alguien con conocimientos técnicos. Antes de exponer el portal como sistema institucional, el ingreso debe delegarse a Microsoft Entra ID y la edición de contenido debe quedar detrás de un servidor.</p>
+    </div>`;
+
+  $("#btn-cuenta").onclick = async () => {
+    const msg = $("#msg-cuenta");
+    const actual = await cifrar($("#q-actual").value);
+    if (actual !== a.clave) return (msg.innerHTML = '<div class="aviso">La contraseña actual no es correcta.</div>');
+    const nueva = $("#q-nueva").value, nueva2 = $("#q-nueva2").value;
+    const correo = $("#q-correo").value.trim().toLowerCase();
+    if (!correo) return (msg.innerHTML = '<div class="aviso">El usuario no puede quedar vacío.</div>');
+    if (nueva.length < 10) return (msg.innerHTML = '<div class="aviso">La contraseña nueva debe tener al menos 10 caracteres.</div>');
+    if (nueva !== nueva2) return (msg.innerHTML = '<div class="aviso">Las dos contraseñas no coinciden.</div>');
+    guardarJSON(K.admin, { correo, clave: await cifrar(nueva), creado: a.creado, inicial: false });
+    msg.innerHTML = '<div class="aviso aviso--ok">Credenciales actualizadas.</div>';
+    toast("Credenciales actualizadas");
+    pintarCuenta();
+  };
+}
+
+/* ========================= ARRANQUE ========================= */
+(async function iniciar() {
+  await credencialesAdmin();
+  if (!almacen.persistente) {
+    $("#msg").innerHTML = '<div class="aviso">Este navegador bloquea el almacenamiento local: los cambios no se conservarán al cerrar la pestaña.</div>';
+  }
+  if (almacen.leer(K.sesionAdmin)) abrirPanel();
+})();
+</script>
+</body>
+</html>
