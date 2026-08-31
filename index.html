@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal de Inducción al SIGC — Universidad del Norte</title>
+<meta name="description" content="Portal de aprendizaje para la inducción de colaboradores al Sistema Integrado de Gestión de Calidad de la Universidad del Norte.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul-900:#00234B;
+  --azul-800:#003C71;
+  --azul-600:#0B6FB4;
+  --cian:#23A9D8;
+  --dorado:#F0B323;
+  --papel:#F6F7F9;
+  --blanco:#FFFFFF;
+  --tinta:#16202B;
+  --gris:#5B6B7C;
+  --gris-claro:#8A99A8;
+  --linea:#DCE3EA;
+  --exito:#1B7F5A;
+  --alerta:#B3421B;
+  --sans:"Libre Franklin",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Source Serif 4",Georgia,serif;
+  --rail:280px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--sans);
+  color:var(--tinta);
+  background:var(--papel);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--sans);font-weight:600;letter-spacing:-0.015em;margin:0;line-height:1.2}
+p{margin:0 0 1em}
+a{color:var(--azul-600)}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--cian);outline-offset:2px;border-radius:2px}
+.oculto{display:none !important}
+.solo-lectores{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Placa de código documental: firma visual del portal ---------- */
+.placa{
+  display:inline-block;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.08em;
+  color:var(--azul-600);
+  border:1px solid var(--linea);
+  border-left:3px solid var(--cian);
+  padding:3px 8px;
+  background:var(--blanco);
+  font-variant-numeric:tabular-nums;
+}
+.placa.oscura{color:var(--cian);background:transparent;border-color:rgba(255,255,255,.22);border-left-color:var(--cian)}
+
+/* ============================ ACCESO ============================ */
+.acceso{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+.acceso__marca{
+  position:relative;overflow:hidden;
+  background:var(--azul-900);
+  color:#EAF2F8;
+  padding:56px 56px 40px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.acceso__marca svg.trama{position:absolute;inset:0;width:100%;height:100%;opacity:.16}
+.acceso__marca > *{position:relative}
+.marca__sello{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.marca__escudo{width:42px;height:42px;flex:none}
+.marca__nombre{font-size:15px;font-weight:600;line-height:1.25}
+.marca__nombre span{display:block;font-weight:400;color:#9FBBD1;font-size:13px}
+.acceso__titulo{font-size:clamp(32px,4.2vw,48px);font-weight:700;max-width:12ch;margin:0 0 20px}
+.acceso__bajada{font-family:var(--serif);font-size:19px;line-height:1.55;color:#C6D9E7;max-width:44ch;margin:0}
+.acceso__hechos{display:flex;gap:36px;margin-top:40px;border-top:1px solid rgba(255,255,255,.16);padding-top:22px}
+.hecho b{display:block;font-size:26px;font-weight:600;color:var(--blanco);font-variant-numeric:tabular-nums}
+.hecho span{font-size:13px;color:#9FBBD1}
+.acceso__pie{font-size:12.5px;color:#7E9DB5;margin-top:40px}
+
+.acceso__panel{background:var(--blanco);display:flex;align-items:center;justify-content:center;padding:48px 40px}
+.panel{width:100%;max-width:400px}
+.panel h2{font-size:26px;margin-bottom:6px}
+.panel__intro{color:var(--gris);font-size:15px;margin-bottom:26px}
+.pestanas{display:flex;gap:26px;border-bottom:1px solid var(--linea);margin-bottom:26px}
+.pestanas button{
+  background:none;border:none;padding:0 0 12px;font-size:15px;font-weight:500;
+  color:var(--gris);border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+.pestanas button[aria-selected="true"]{color:var(--azul-800);border-bottom-color:var(--azul-800);font-weight:600}
+.campo{margin-bottom:16px}
+.campo label{display:block;font-size:13.5px;font-weight:500;margin-bottom:5px;color:var(--tinta)}
+.campo input,.campo select{
+  width:100%;padding:11px 12px;font-size:15px;font-family:inherit;color:var(--tinta);
+  border:1px solid var(--linea);border-radius:3px;background:var(--blanco);
+}
+.campo input:focus,.campo select:focus{border-color:var(--azul-600);outline:none;box-shadow:0 0 0 3px rgba(11,111,180,.14)}
+.campo .pista{font-size:12.5px;color:var(--gris-claro);margin-top:5px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.boton{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--azul-800);color:var(--blanco);border:1px solid var(--azul-800);
+  padding:12px 20px;border-radius:3px;font-weight:600;font-size:15px;width:100%;
+  transition:background .15s ease;
+}
+.boton:hover{background:var(--azul-900)}
+.boton--secundario{background:transparent;color:var(--azul-800);border-color:var(--linea);width:auto}
+.boton--secundario:hover{background:var(--papel)}
+.boton--fino{width:auto;padding:9px 16px;font-size:14px}
+.boton[disabled]{opacity:.5;cursor:not-allowed}
+.aviso{
+  border-left:3px solid var(--alerta);background:#FDF1EC;color:#7A3315;
+  padding:10px 12px;font-size:13.5px;margin-bottom:16px;
+}
+.aviso--ok{border-left-color:var(--exito);background:#EDF7F2;color:#125C41}
+.nota-privacidad{font-size:12.5px;color:var(--gris-claro);line-height:1.5;margin-top:20px;border-top:1px solid var(--linea);padding-top:14px}
+
+/* ============================ PORTAL ============================ */
+.portal{min-height:100vh;display:flex;flex-direction:column}
+.barra{
+  background:var(--azul-900);color:var(--blanco);
+  display:flex;align-items:center;gap:18px;padding:0 22px;height:60px;flex:none;
+}
+.barra__marca{display:flex;align-items:center;gap:11px;font-weight:600;font-size:14.5px}
+.barra__marca svg{width:26px;height:26px}
+.barra__espacio{flex:1}
+.barra__usuario{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#C6D9E7}
+.avatar{
+  width:32px;height:32px;border-radius:50%;background:var(--azul-600);color:var(--blanco);
+  display:grid;place-items:center;font-weight:600;font-size:13px;flex:none;
+}
+.barra button.enlace{background:none;border:none;color:#9FBBD1;font-size:13.5px;padding:6px 8px}
+.barra button.enlace:hover{color:var(--blanco);text-decoration:underline}
+.menu-movil{display:none;background:none;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:3px;padding:6px 9px}
+
+.avance-global{height:3px;background:#01305F;flex:none}
+.avance-global i{display:block;height:100%;background:var(--cian);width:0;transition:width .4s ease}
+
+.cuerpo{display:flex;flex:1;min-height:0;align-items:stretch}
+
+/* Rail: índice del curso */
+.rail{
+  width:var(--rail);flex:none;background:var(--blanco);border-right:1px solid var(--linea);
+  padding:24px 0 40px;overflow-y:auto;
+}
+.rail__titulo{padding:0 22px 14px;border-bottom:1px solid var(--linea);margin-bottom:14px}
+.rail__titulo h2{font-size:15px}
+.rail__titulo p{font-size:12.5px;color:var(--gris);margin:5px 0 0}
+.rail__grupo{margin-bottom:6px}
+.rail__modulo{
+  display:flex;gap:9px;align-items:baseline;padding:9px 22px 4px;
+  font-size:12.5px;font-weight:600;color:var(--azul-800);
+}
+.rail__modulo b{color:var(--cian);font-variant-numeric:tabular-nums;font-weight:700}
+.rail ul{list-style:none;margin:0;padding:0}
+.rail li button{
+  display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;
+  background:none;border:none;padding:8px 22px 8px 26px;font-size:14px;color:var(--tinta);
+  border-left:3px solid transparent;line-height:1.35;
+}
+.rail li button:hover{background:var(--papel)}
+.rail li button[aria-current="true"]{background:#F0F6FB;border-left-color:var(--azul-800);font-weight:600;color:var(--azul-900)}
+.marca-estado{width:16px;height:16px;flex:none;margin-top:2px;border-radius:50%;border:1.5px solid var(--linea);display:grid;place-items:center}
+.marca-estado.hecho{background:var(--exito);border-color:var(--exito)}
+.marca-estado.hecho::after{content:"";width:8px;height:4px;border-left:1.7px solid #fff;border-bottom:1.7px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.rail__final{margin-top:16px;border-top:1px solid var(--linea);padding-top:12px}
+
+/* Contenido */
+.contenido{flex:1;min-width:0;overflow-y:auto;padding:38px 46px 90px}
+.lienzo{max-width:720px}
+.lienzo--ancho{max-width:960px}
+.migas{font-size:13px;color:var(--gris);margin-bottom:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.leccion__encabezado{border-bottom:1px solid var(--linea);padding-bottom:20px;margin-bottom:26px}
+.leccion__encabezado h1{font-size:clamp(26px,3.2vw,34px);margin:12px 0 10px}
+.objetivo{font-family:var(--serif);font-size:18px;color:var(--gris);line-height:1.5;margin:0}
+.prosa{font-family:var(--serif);font-size:17.5px;line-height:1.68;color:#22303D}
+.prosa h3{font-family:var(--sans);font-size:19px;margin:32px 0 10px;color:var(--azul-900)}
+.prosa h4{font-family:var(--sans);font-size:15.5px;margin:24px 0 8px;color:var(--azul-800)}
+.prosa ul,.prosa ol{margin:0 0 1.1em;padding-left:1.25em}
+.prosa li{margin-bottom:.5em}
+.prosa strong{font-weight:600;color:var(--azul-900)}
+.prosa table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14.5px;margin:0 0 1.4em}
+.prosa th{text-align:left;background:#EEF3F8;color:var(--azul-900);font-weight:600;padding:9px 11px;border:1px solid var(--linea)}
+.prosa td{padding:9px 11px;border:1px solid var(--linea);vertical-align:top}
+.prosa figure{margin:26px 0}
+.prosa figcaption{font-family:var(--sans);font-size:13px;color:var(--gris);margin-top:9px}
+.destacado{
+  border-left:3px solid var(--azul-600);background:#F0F6FB;padding:16px 18px;margin:24px 0;
+  font-family:var(--sans);font-size:15px;line-height:1.55;
+}
+.destacado p:last-child{margin-bottom:0}
+.destacado h4{margin-top:0}
+.pendiente{
+  border:1px dashed var(--dorado);background:#FEF8E9;padding:16px 18px;margin:24px 0;
+  font-family:var(--sans);font-size:14.5px;line-height:1.55;color:#6B4E06;
+}
+.pendiente p:last-child{margin-bottom:0}
+.pendiente b{color:#8A6200}
+
+/* Comprobación */
+.comprobacion{margin-top:44px;border-top:1px solid var(--linea);padding-top:28px}
+.comprobacion h3{font-size:19px;margin-bottom:6px}
+.comprobacion > p{color:var(--gris);font-size:14.5px}
+.pregunta{margin-top:22px}
+.pregunta__texto{font-weight:500;margin-bottom:12px;font-size:15.5px}
+.opcion{
+  display:flex;gap:11px;align-items:flex-start;border:1px solid var(--linea);background:var(--blanco);
+  padding:12px 14px;margin-bottom:8px;border-radius:3px;cursor:pointer;font-size:15px;line-height:1.4;
+}
+.opcion:hover{border-color:var(--azul-600)}
+.opcion input{margin:3px 0 0}
+.opcion.correcta{border-color:var(--exito);background:#EDF7F2}
+.opcion.incorrecta{border-color:var(--alerta);background:#FDF1EC}
+.retro{font-size:14.5px;margin-top:10px;padding:11px 13px;border-left:3px solid var(--linea);background:var(--papel)}
+.retro.ok{border-left-color:var(--exito)}
+.retro.no{border-left-color:var(--alerta)}
+.acciones{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:26px}
+
+/* Inicio */
+.tablero__saludo{font-size:clamp(28px,3.4vw,36px);margin-bottom:10px}
+.tablero__intro{font-family:var(--serif);font-size:18.5px;color:var(--gris);max-width:60ch;line-height:1.55}
+.resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--linea);border:1px solid var(--linea);margin:32px 0 38px}
+.resumen div{background:var(--blanco);padding:18px 20px}
+.resumen b{display:block;font-size:30px;font-weight:600;color:var(--azul-900);font-variant-numeric:tabular-nums;line-height:1.1}
+.resumen span{font-size:13.5px;color:var(--gris);display:block;margin-top:5px}
+.ruta{border-top:1px solid var(--linea)}
+.ruta__mod{border-bottom:1px solid var(--linea);padding:20px 0;display:grid;grid-template-columns:52px 1fr auto;gap:18px;align-items:start}
+.ruta__num{font-size:13px;font-weight:700;color:var(--cian);padding-top:3px;font-variant-numeric:tabular-nums}
+.ruta__mod h3{font-size:18px;margin-bottom:5px}
+.ruta__mod p{font-size:14.5px;color:var(--gris);margin:0 0 8px;max-width:62ch}
+.ruta__lecciones{font-size:13px;color:var(--gris-claro)}
+.barrita{height:4px;background:var(--linea);width:110px;margin-top:9px}
+.barrita i{display:block;height:100%;background:var(--azul-600)}
+
+/* Constancia */
+.constancia{
+  background:var(--blanco);border:1px solid var(--linea);border-top:5px solid var(--azul-800);
+  padding:52px 56px;margin-top:26px;text-align:center;
+}
+.constancia__sello{width:56px;height:56px;margin:0 auto 20px}
+.constancia h2{font-size:15px;font-weight:600;color:var(--gris);letter-spacing:.04em;margin-bottom:26px}
+.constancia__nombre{font-family:var(--serif);font-size:34px;font-weight:600;color:var(--azul-900);margin:0 0 6px}
+.constancia__datos{font-size:14.5px;color:var(--gris);margin-bottom:26px}
+.constancia__texto{font-family:var(--serif);font-size:17.5px;line-height:1.6;max-width:56ch;margin:0 auto 30px;color:#22303D}
+.constancia__pie{border-top:1px solid var(--linea);padding-top:18px;font-size:13px;color:var(--gris-claro);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* Perfil */
+.ficha{background:var(--blanco);border:1px solid var(--linea);padding:26px 28px;margin-top:24px}
+.ficha dl{display:grid;grid-template-columns:180px 1fr;gap:12px 20px;margin:0;font-size:15px}
+.ficha dt{color:var(--gris);font-size:14px}
+.ficha dd{margin:0;font-weight:500}
+
+@media (max-width:1080px){
+  .acceso{grid-template-columns:1fr}
+  .acceso__marca{padding:40px 32px}
+  .acceso__marca .acceso__hechos{margin-top:28px}
+  .contenido{padding:30px 28px 80px}
+}
+@media (max-width:860px){
+  .menu-movil{display:block}
+  .rail{position:fixed;z-index:40;top:63px;bottom:0;left:0;transform:translateX(-100%);transition:transform .22s ease;box-shadow:0 12px 40px rgba(0,35,75,.18)}
+  .rail.abierto{transform:none}
+  .barra__usuario span.nombre{display:none}
+  .fila{grid-template-columns:1fr}
+  .constancia{padding:34px 24px}
+  .ficha dl{grid-template-columns:1fr;gap:4px 0}
+  .ficha dt{margin-top:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+}
+@media print{
+  .barra,.rail,.avance-global,.acciones,.migas,.no-imprimir{display:none !important}
+  .contenido{padding:0;overflow:visible}
+  body{background:#fff}
+  .constancia{border:none;margin:0;padding:0}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="sello" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="22.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M13 30c4-9 8-13.5 11-13.5S31 21 35 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M13 22.5c4-9 8-13.5 11-13.5S31 13.5 35 22.5" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55" stroke-linecap="round"/>
+    <circle cx="24" cy="36" r="2.1" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<!-- ======================= PANTALLA DE ACCESO ======================= -->
+<main class="acceso" id="vista-acceso">
+  <section class="acceso__marca">
+    <svg class="trama" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g fill="none" stroke="#4FC3EA" stroke-width="1">
+        <rect x="40" y="60" width="320" height="70"/>
+        <rect x="40" y="160" width="320" height="70"/>
+        <rect x="40" y="260" width="320" height="70"/>
+        <rect x="40" y="360" width="320" height="70"/>
+        <path d="M200 130v30M200 230v30M200 330v30"/>
+        <path d="M70 95h60M270 95h60M70 195h60M270 195h60M70 295h60M270 295h60M70 395h60M270 395h60"/>
+      </g>
+    </svg>
+
+    <div class="marca__sello">
+      <svg class="marca__escudo" style="color:#4FC3EA"><use href="#sello"></use></svg>
+      <div class="marca__nombre">Universidad del Norte
+        <span>Dirección de Calidad y Proyectos Académicos</span>
+      </div>
+    </div>
+
+    <div>
+      <p class="placa oscura">IND-SIGC-2026</p>
+      <h1 class="acceso__titulo">Portal de inducción al SIGC</h1>
+      <p class="acceso__bajada">Un recorrido de cinco módulos por la política de calidad, los compromisos institucionales, los objetivos y la arquitectura del Sistema Integrado de Gestión de Calidad. Al terminar sabrás dónde está tu trabajo dentro del sistema y qué se espera de ti.</p>
+
+      <div class="acceso__hechos">
+        <div class="hecho"><b>5</b><span>módulos</span></div>
+        <div class="hecho"><b>14</b><span>lecciones</span></div>
+        <div class="hecho"><b>90</b><span>minutos aprox.</span></div>
+      </div>
+    </div>
+
+    <p class="acceso__pie">Dirigido a colaboradores académicos y administrativos. La constancia se genera al aprobar la evaluación final.</p>
+  </section>
+
+  <section class="acceso__panel">
+    <div class="panel">
+      <div class="pestanas" role="tablist">
+        <button role="tab" id="tab-entrar" aria-selected="true" aria-controls="form-entrar">Entrar</button>
+        <button role="tab" id="tab-registro" aria-selected="false" aria-controls="form-registro">Crear cuenta</button>
+      </div>
+
+      <div id="mensaje-acceso"></div>
+
+      <!-- Ingreso -->
+      <form id="form-entrar" role="tabpanel" aria-labelledby="tab-entrar" novalidate>
+        <h2>Retoma tu inducción</h2>
+        <p class="panel__intro">Ingresa con el correo institucional que registraste.</p>
+        <div class="campo">
+          <label for="e-correo">Correo institucional</label>
+          <input id="e-correo" type="email" autocomplete="username" placeholder="nombre@uninorte.edu.co" required>
+        </div>
+        <div class="campo">
+          <label for="e-clave">Contraseña</label>
+          <input id="e-clave" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="boton" type="submit">Entrar al portal</button>
+      </form>
+
+      <!-- Registro -->
+      <form id="form-registro" class="oculto" role="tabpanel" aria-labelledby="tab-registro" novalidate>
+        <h2>Crea tu cuenta</h2>
+        <p class="panel__intro">Necesitamos estos datos para emitir la constancia a tu nombre y reportar la cobertura por dependencia.</p>
+        <div class="campo">
+          <label for="r-nombre">Nombre y apellidos</label>
+          <input id="r-nombre" type="text" autocomplete="name" required>
+        </div>
+        <div class="campo">
+          <label for="r-correo">Correo institucional</label>
+          <input id="r-correo" type="email" autocomplete="username" placeholder="nombre@uninorte.edu.co" required>
+          <p class="pista">Debe terminar en uninorte.edu.co</p>
+        </div>
+        <div class="fila">
+          <div class="campo">
+            <label for="r-dependencia">Dependencia o división</label>
+            <select id="r-dependencia" required>
+              <option value="">Selecciona</option>
+              <option>División de Ciencias Básicas</option>
+              <option>División de Ciencias de la Salud</option>
+              <option>División de Ciencias Jurídicas</option>
+              <option>División de Humanidades y Ciencias Sociales</option>
+              <option>División de Ingenierías</option>
+              <option>Escuela de Negocios</option>
+              <option>Dirección de Calidad y Proyectos Académicos</option>
+              <option>Dirección de Gestión y Desarrollo Humano</option>
+              <option>Dirección de Admisiones y Registro</option>
+              <option>Dirección Financiera</option>
+              <option>Dirección de Bienestar Universitario</option>
+              <option>Biblioteca</option>
+              <option>Dirección de Tecnología Informática</option>
+              <option>Otra dependencia</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="r-cargo">Cargo</label>
+            <input id="r-cargo" type="text" placeholder="Coordinador, docente, analista..." required>
+          </div>
+        </div>
+        <div class="fila">
+          <div class="campo">
+            <label for="r-clave">Contraseña</label>
+            <input id="r-clave" type="password" autocomplete="new-password" required>
+            <p class="pista">Mínimo 8 caracteres</p>
+          </div>
+          <div class="campo">
+            <label for="r-clave2">Repite la contraseña</label>
+            <input id="r-clave2" type="password" autocomplete="new-password" required>
+          </div>
+        </div>
+        <button class="boton" type="submit">Crear cuenta y empezar</button>
+      </form>
+
+      <p class="nota-privacidad" id="nota-privacidad">
+        Versión piloto: la cuenta y el avance se guardan únicamente en este navegador, no en un servidor de la Universidad. No uses aquí la contraseña de tu cuenta institucional.
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- ======================= PORTAL ======================= -->
+<div class="portal oculto" id="vista-portal">
+  <header class="barra">
+    <button class="menu-movil" id="btn-menu" aria-label="Abrir el índice del curso" aria-expanded="false">Índice</button>
+    <div class="barra__marca">
+      <svg style="color:#4FC3EA" viewBox="0 0 48 48"><use href="#sello"></use></svg>
+      <span>Portal de inducción al SIGC</span>
+    </div>
+    <div class="barra__espacio"></div>
+    <button class="enlace" id="btn-inicio">Inicio</button>
+    <button class="enlace" id="btn-perfil">Mi perfil</button>
+    <div class="barra__usuario">
+      <div class="avatar" id="avatar" aria-hidden="true"></div>
+      <span class="nombre" id="nombre-barra"></span>
+    </div>
+    <button class="enlace" id="btn-salir">Salir</button>
+  </header>
+  <div class="avance-global" role="progressbar" aria-label="Avance del curso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="barra-avance"><i></i></div>
+
+  <div class="cuerpo">
+    <nav class="rail" id="rail" aria-label="Índice del curso"></nav>
+    <main class="contenido" id="contenido" tabindex="-1"></main>
+  </div>
+</div>
+<script>
+/* =====================================================================
+   PORTAL DE INDUCCIÓN AL SIGC — Universidad del Norte
+   ---------------------------------------------------------------------
+   CONTENIDO DEL CURSO
+   Todo el material editable vive en la constante CURSO. Para actualizar
+   una lección basta con cambiar su texto aquí; no hay que tocar la
+   lógica de la aplicación.
+
+   Los bloques marcados con la clase "pendiente" contienen textos de
+   referencia que deben reemplazarse por la versión oficial aprobada,
+   siguiendo la convención institucional de dejar [Pendiente] antes que
+   inventar contenido normativo.
+   ===================================================================== */
+
+const CURSO = {
+  titulo: "Inducción al Sistema Integrado de Gestión de Calidad",
+  codigo: "IND-SIGC-2026",
+  version: "1.0",
+  modulos: [
+
+  /* ================= MÓDULO 1 ================= */
+  {
+    id: "m1",
+    titulo: "El SIGC en la Universidad del Norte",
+    resumen: "Qué es el sistema, por qué existe y sobre qué marco normativo se apoya.",
+    lecciones: [
+      {
+        id: "l01", codigo: "IND-SIGC-L01",
+        titulo: "Qué es el SIGC y por qué existe",
+        objetivo: "Reconocer el SIGC como el sistema con el que la Universidad planea, ejecuta, verifica y mejora su trabajo, y distinguirlo de la idea de un archivo de documentos.",
+        html: `
+<p>El <strong>Sistema Integrado de Gestión de Calidad (SIGC)</strong> es el conjunto articulado de políticas, procesos, procedimientos, responsables, recursos y mecanismos de evaluación con los que la Universidad del Norte asegura que lo que promete es lo que efectivamente entrega: formación, investigación, extensión y los servicios que las sostienen.</p>
+
+<p>No es un requisito externo que se atiende cada cierto tiempo. Es la forma en que la institución responde tres preguntas de manera permanente:</p>
+<ul>
+  <li><strong>Qué hacemos y cómo lo hacemos.</strong> Los procesos y documentos describen la manera acordada de trabajar, para que el resultado no dependa de quién esté en el cargo.</li>
+  <li><strong>Cómo sabemos que funciona.</strong> Indicadores, autoevaluación, auditorías y la voz de estudiantes, docentes, egresados y empleadores dan evidencia del desempeño.</li>
+  <li><strong>Qué hacemos cuando no funciona.</strong> Las acciones de mejora convierten un hallazgo en un cambio real y verificable.</li>
+</ul>
+
+<h3>Para qué le sirve a la institución</h3>
+<ul>
+  <li>Sostener la <strong>acreditación institucional y la de los programas</strong> con evidencia construida durante el día a día, no en vísperas de una visita.</li>
+  <li>Dar <strong>trazabilidad</strong>: quién decidió qué, cuándo y con qué soporte.</li>
+  <li>Reducir el <strong>reproceso</strong> y la dependencia del conocimiento no documentado.</li>
+  <li>Articular unidades académicas y administrativas alrededor de un mismo lenguaje.</li>
+</ul>
+
+<h3>Tres malentendidos frecuentes</h3>
+<table>
+  <thead><tr><th style="width:44%">Lo que se suele pensar</th><th>Lo que realmente ocurre</th></tr></thead>
+  <tbody>
+    <tr><td>El SIGC es un repositorio de formatos.</td><td>Los documentos son la memoria del sistema, no el sistema. Sin uso, no hay calidad.</td></tr>
+    <tr><td>La calidad es responsabilidad de la DCPA.</td><td>La DCPA administra y acompaña el sistema; la calidad la ejecuta cada dependencia en su proceso.</td></tr>
+    <tr><td>Aplica solo a lo académico.</td><td>Es integrado: alcanza también los procesos administrativos y de apoyo que hacen posible lo académico.</td></tr>
+  </tbody>
+</table>
+
+<div class="destacado">
+  <h4>La idea que conviene llevarse</h4>
+  <p>El SIGC existe para que la calidad sea una consecuencia de cómo trabajamos todos los días, y no un esfuerzo excepcional cada vez que se acerca una evaluación externa.</p>
+</div>`,
+        preguntas: [
+          { q: "¿Cuál de estas afirmaciones describe mejor el SIGC?",
+            ops: ["El repositorio institucional donde se archivan los formatos de calidad.",
+                  "El sistema articulado de políticas, procesos, responsables y mecanismos de evaluación con que la Universidad planea, ejecuta, verifica y mejora su trabajo.",
+                  "El conjunto de auditorías que se realizan antes de una visita de acreditación.",
+                  "El área encargada de responder los requerimientos del Ministerio de Educación."],
+            r: 1,
+            exp: "El SIGC es el sistema completo de gestión. Los documentos, las auditorías y el trabajo de la DCPA son componentes suyos, no su definición." },
+          { q: "Un coordinador afirma: la calidad es tarea de la Dirección de Calidad. ¿Cómo se corrige esa idea?",
+            ops: ["Es correcta: la DCPA responde por el desempeño de todos los procesos.",
+                  "Es correcta solo para los procesos académicos.",
+                  "La DCPA administra y acompaña el sistema, pero cada dependencia responde por la calidad de su propio proceso.",
+                  "Depende de si la dependencia está incluida en el alcance de la acreditación."],
+            r: 2,
+            exp: "La responsabilidad es distribuida: el sistema se administra centralmente y se ejecuta en cada unidad." }
+        ]
+      },
+
+      {
+        id: "l02", codigo: "IND-SIGC-L02",
+        titulo: "El marco normativo que lo sustenta",
+        objetivo: "Ubicar las principales normas y referentes que dan origen a las exigencias del sistema, y entender por qué la Universidad va más allá del mínimo legal.",
+        html: `
+<p>El SIGC no nace de una preferencia administrativa: responde a un marco normativo nacional y a referentes internacionales que la Universidad adopta de forma voluntaria.</p>
+
+<h3>Marco nacional</h3>
+<table>
+  <thead><tr><th style="width:34%">Referente</th><th>Qué aporta al sistema</th></tr></thead>
+  <tbody>
+    <tr><td>Constitución Política, artículo 69</td><td>Reconoce la autonomía universitaria: la Universidad se autorregula, y por eso necesita su propio sistema de aseguramiento.</td></tr>
+    <tr><td>Ley 30 de 1992</td><td>Organiza el servicio público de la educación superior y crea el sistema de acreditación.</td></tr>
+    <tr><td>Ley 1188 de 2008</td><td>Establece el registro calificado como condición para ofrecer programas.</td></tr>
+    <tr><td>Decreto 1330 de 2019</td><td>Define las condiciones de calidad institucionales y de programa, y exige un sistema interno de aseguramiento de la calidad.</td></tr>
+    <tr><td>Acuerdo 02 de 2020 del CESU</td><td>Actualiza el modelo de acreditación en alta calidad por factores y características.</td></tr>
+  </tbody>
+</table>
+
+<h3>Referentes de gestión</h3>
+<p>Para los procesos administrativos y de apoyo, la Universidad toma como referencia el enfoque de la norma <strong>ISO 9001</strong>: gestión por procesos, pensamiento basado en riesgos, enfoque al usuario y mejora continua. Adoptar el enfoque no equivale necesariamente a certificarse; significa usar una gramática común y probada para ordenar el trabajo.</p>
+
+<div class="destacado">
+  <h4>Cumplir no es lo mismo que asegurar</h4>
+  <p>La norma marca el piso: lo que hay que demostrar ante el Ministerio o el CNA. El SIGC apunta a algo más exigente: que el resultado sea consistente incluso cuando nadie está evaluando.</p>
+</div>
+
+<div class="pendiente">
+  <p><b>Pendiente de verificación.</b> Antes de publicar esta lección, la DCPA debe confirmar la vigencia de las normas citadas y agregar los acuerdos internos del Consejo Directivo y del Consejo Académico que soportan el SIGC en Uninorte, con su número y fecha. Las referencias internas se dejan como <b>[Pendiente]</b> hasta su verificación.</p>
+</div>`,
+        preguntas: [
+          { q: "¿Qué norma introduce la exigencia de contar con un sistema interno de aseguramiento de la calidad?",
+            ops: ["La Ley 30 de 1992.", "El Decreto 1330 de 2019.", "El Acuerdo 02 de 2020 del CESU.", "La Ley 1188 de 2008."],
+            r: 1,
+            exp: "El Decreto 1330 de 2019 define las condiciones de calidad y sitúa el sistema interno de aseguramiento como una de ellas." },
+          { q: "¿Por qué la Universidad adopta el enfoque de ISO 9001 en sus procesos administrativos?",
+            ops: ["Porque el Ministerio de Educación lo exige para el registro calificado.",
+                  "Porque reemplaza al modelo de acreditación del CNA.",
+                  "Porque aporta un marco probado de gestión por procesos, riesgos y mejora continua que ordena el trabajo de apoyo.",
+                  "Porque es requisito para la contratación de personal administrativo."],
+            r: 2,
+            exp: "Es una adopción voluntaria de un enfoque de gestión; no sustituye ni es exigida por el marco de acreditación." }
+        ]
+      },
+
+      {
+        id: "l03", codigo: "IND-SIGC-L03",
+        titulo: "Alcance del sistema: SIGC y SIACA",
+        objetivo: "Distinguir el alcance general del SIGC del componente académico (SIACA) y reconocer en cuál de los dos se inscribe el trabajo propio.",
+        html: `
+<p>El sistema tiene un alcance institucional, pero opera con dos énfasis complementarios que conviene no confundir.</p>
+
+<h3>SIGC: el sistema integrado</h3>
+<p>Cubre la totalidad de los procesos de la Universidad —estratégicos, misionales, de apoyo y de evaluación—, incluidas las dependencias administrativas cuyo trabajo no es visible para el estudiante pero condiciona su experiencia: admisiones, financiera, tecnología, planta física, gestión humana, biblioteca.</p>
+
+<h3>SIACA: el componente académico</h3>
+<p>El <strong>Sistema Interno de Aseguramiento de la Calidad Académica</strong> concentra lo relacionado con programas y funciones sustantivas: creación y modificación de programas, autoevaluación, planes de mejoramiento, renovación de registro calificado y acreditación, seguimiento curricular y evaluación de resultados de aprendizaje.</p>
+
+<div class="destacado">
+  <h4>Cómo se relacionan</h4>
+  <p>El SIACA es el componente académico dentro del SIGC, no un sistema paralelo. Comparten política, mapa de procesos, control documental y mecanismos de mejora; se diferencian en el objeto que gestionan.</p>
+</div>
+
+<h4>Dónde está tu trabajo</h4>
+<ul>
+  <li>Si coordinas un programa, participas en autoevaluación o preparas un documento maestro, tu trabajo está en el <strong>SIACA</strong>.</li>
+  <li>Si gestionas contratación, compras, matrícula, soporte o infraestructura, tu proceso está en el <strong>SIGC</strong> y alimenta al SIACA con evidencia.</li>
+  <li>En ambos casos aplican las mismas reglas de documentación, indicadores y acciones de mejora.</li>
+</ul>
+
+<div class="pendiente">
+  <p><b>Pendiente de ajuste.</b> La descripción del alcance debe alinearse con la definición formal vigente del SIACA en Uninorte y con el acto administrativo que lo adopta: <b>[Pendiente]</b>.</p>
+</div>`,
+        preguntas: [
+          { q: "¿Cuál es la relación correcta entre el SIGC y el SIACA?",
+            ops: ["Son dos sistemas independientes con políticas y documentos propios.",
+                  "El SIACA es el componente académico dentro del SIGC y comparte con él política, procesos y control documental.",
+                  "El SIGC aplica a programas y el SIACA a las dependencias administrativas.",
+                  "El SIACA reemplazó al SIGC a partir del Decreto 1330 de 2019."],
+            r: 1,
+            exp: "Es una relación de contenido: mismo sistema, énfasis académico." },
+          { q: "Una analista de la Dirección Financiera pregunta si el sistema le aplica. ¿Qué corresponde responderle?",
+            ops: ["No, el sistema cubre solo programas académicos.",
+                  "Solo durante los procesos de acreditación institucional.",
+                  "Sí: su proceso es de apoyo dentro del SIGC y aplica las mismas reglas de documentación, indicadores y mejora.",
+                  "Solo si su dependencia decide certificarse en ISO 9001."],
+            r: 2,
+            exp: "El alcance es institucional; los procesos de apoyo están plenamente incluidos." }
+        ]
+      }
+    ]
+  },
+
+  /* ================= MÓDULO 2 ================= */
+  {
+    id: "m2",
+    titulo: "Política de calidad y compromisos",
+    resumen: "La declaración que orienta el sistema, los compromisos que se derivan de ella y su traducción al puesto de trabajo.",
+    lecciones: [
+      {
+        id: "l04", codigo: "IND-SIGC-L04",
+        titulo: "La política de calidad",
+        objetivo: "Leer la política de calidad identificando sus cuatro partes y explicar qué obliga a hacer, no solo qué declara.",
+        html: `
+<p>La <strong>política de calidad</strong> es la declaración aprobada por la alta dirección que fija el compromiso de la Universidad con la calidad y da el marco para definir los objetivos. Es el documento del que cuelga todo lo demás: si una decisión del sistema no puede rastrearse hasta la política, algo está desalineado.</p>
+
+<h3>Cómo se lee una política de calidad</h3>
+<p>Toda política bien formulada contiene cuatro elementos. Identificarlos ayuda a usarla como herramienta y no como cartel:</p>
+<ol>
+  <li><strong>Propósito y alcance:</strong> qué hace la institución y sobre qué procesos se compromete.</li>
+  <li><strong>Compromisos:</strong> las obligaciones que asume, incluida la de cumplir requisitos legales y los de sus grupos de interés.</li>
+  <li><strong>Marco para los objetivos:</strong> la conexión explícita con los objetivos de calidad medibles.</li>
+  <li><strong>Mejora continua:</strong> la declaración de que el desempeño se revisa y se eleva de forma sistemática.</li>
+</ol>
+
+<div class="pendiente">
+  <p><b>Texto de referencia — reemplazar por la versión oficial.</b> El párrafo siguiente ilustra la estructura esperada. La DCPA debe sustituirlo por la política de calidad aprobada, con su código, versión y fecha de aprobación: <b>[Pendiente]</b>.</p>
+  <p>La Universidad del Norte se compromete a formar personas íntegras y competentes, generar conocimiento pertinente e interactuar con su entorno, mediante procesos académicos y administrativos que cumplen los requisitos legales y las expectativas de sus grupos de interés, cuentan con talento humano competente y recursos suficientes, y se evalúan y mejoran de forma continua a partir de evidencia.</p>
+</div>
+
+<h3>Qué obliga a hacer</h3>
+<ul>
+  <li><strong>Comunicarla y entenderla.</strong> No basta con publicarla: cada colaborador debe poder explicar qué significa en su trabajo.</li>
+  <li><strong>Desplegarla en objetivos medibles.</strong> Una política sin indicadores asociados es una intención.</li>
+  <li><strong>Revisarla.</strong> Se somete a revisión periódica por la alta dirección para confirmar que sigue siendo pertinente.</li>
+</ul>
+
+<div class="destacado">
+  <p>Una prueba sencilla: si al leer la política no puedes nombrar al menos una cosa que harás distinto mañana, la política todavía no está desplegada en tu proceso.</p>
+</div>`,
+        preguntas: [
+          { q: "¿Cuál de estos elementos NO forma parte de una política de calidad bien formulada?",
+            ops: ["El compromiso de cumplir requisitos legales y de los grupos de interés.",
+                  "El marco de referencia para establecer los objetivos de calidad.",
+                  "El listado detallado de indicadores con sus metas y fórmulas de cálculo.",
+                  "El compromiso con la mejora continua del sistema."],
+            r: 2,
+            exp: "Los indicadores y sus metas viven en los objetivos y sus fichas técnicas. La política da el marco, no el detalle de medición." },
+          { q: "¿Qué implica que la política deba ser comunicada?",
+            ops: ["Que se publique en la intranet y en carteleras.",
+                  "Que cada colaborador pueda explicar qué significa en su propio trabajo.",
+                  "Que se lea en la inducción de personal nuevo.",
+                  "Que se envíe por correo cada vez que cambia de versión."],
+            r: 1,
+            exp: "La comunicación se verifica por comprensión y aplicación, no por difusión." }
+        ]
+      },
+
+      {
+        id: "l05", codigo: "IND-SIGC-L05",
+        titulo: "Los compromisos institucionales",
+        objetivo: "Identificar los compromisos que se desprenden de la política y reconocer la evidencia con la que cada uno se demuestra.",
+        html: `
+<p>Los compromisos son la parte operativa de la política: lo que la Universidad se obliga a sostener. Cada uno debe poder demostrarse con evidencia verificable.</p>
+
+<table>
+  <thead><tr><th style="width:30%">Compromiso</th><th>Qué significa en la práctica</th><th style="width:26%">Evidencia típica</th></tr></thead>
+  <tbody>
+    <tr><td>Excelencia académica</td><td>Programas pertinentes, currículos actualizados y resultados de aprendizaje evaluados.</td><td>Actas de comité curricular, informes de autoevaluación.</td></tr>
+    <tr><td>Cumplimiento normativo</td><td>Operar dentro del marco legal y de los reglamentos internos vigentes.</td><td>Matriz de requisitos legales, registros calificados vigentes.</td></tr>
+    <tr><td>Enfoque en los grupos de interés</td><td>Escuchar y responder a estudiantes, docentes, egresados, empleadores y aliados.</td><td>Encuestas de satisfacción, PQRS, informes de egresados.</td></tr>
+    <tr><td>Competencia del talento humano</td><td>Seleccionar, formar y evaluar al personal según el perfil del cargo.</td><td>Planes de formación, evaluaciones de desempeño.</td></tr>
+    <tr><td>Gestión del riesgo</td><td>Identificar lo que puede impedir el resultado y actuar antes de que ocurra.</td><td>Matrices de riesgo con controles y seguimiento.</td></tr>
+    <tr><td>Mejora continua</td><td>Convertir hallazgos en acciones con responsable, fecha y verificación.</td><td>Planes de mejoramiento y acciones cerradas con evidencia.</td></tr>
+  </tbody>
+</table>
+
+<h3>El criterio que los une</h3>
+<p>Un compromiso sin evidencia es una declaración. Por eso, cada vez que el sistema afirma que algo se cumple, debe existir un registro que lo sostenga: un acta, un indicador medido, una acción cerrada, un documento aprobado y vigente.</p>
+
+<div class="pendiente">
+  <p><b>Pendiente de armonización.</b> Ajustar la tabla a los compromisos exactos declarados en la política vigente y al Plan de Desarrollo Institucional: <b>[Pendiente]</b>.</p>
+</div>`,
+        preguntas: [
+          { q: "¿Qué distingue un compromiso institucional de una declaración de intenciones?",
+            ops: ["Que aparece redactado en la política de calidad.",
+                  "Que puede demostrarse con evidencia verificable y trazable.",
+                  "Que fue aprobado por el Consejo Directivo.",
+                  "Que se comunica en las jornadas de inducción."],
+            r: 1,
+            exp: "La evidencia es lo que convierte un compromiso en verificable." },
+          { q: "Para demostrar el compromiso con la gestión del riesgo, la evidencia más pertinente sería:",
+            ops: ["El informe de satisfacción de estudiantes.",
+                  "El plan de formación del personal.",
+                  "La matriz de riesgos con sus controles y el seguimiento a su efectividad.",
+                  "El acta del comité curricular."],
+            r: 2,
+            exp: "Cada compromiso tiene su evidencia natural; la del riesgo es la matriz con controles y seguimiento." }
+        ]
+      },
+
+      {
+        id: "l06", codigo: "IND-SIGC-L06",
+        titulo: "La política en tu puesto de trabajo",
+        objetivo: "Traducir la política y los compromisos a tres conductas concretas del propio cargo.",
+        html: `
+<p>La pregunta útil no es si conoces la política, sino qué haces distinto por ella. Estos ejemplos muestran la traducción para perfiles frecuentes en la Universidad.</p>
+
+<h4>Si eres docente o coordinas un curso</h4>
+<ul>
+  <li>Mantienes el programa del curso alineado con el plan de estudios vigente y con los resultados de aprendizaje declarados.</li>
+  <li>Conservas la evidencia de evaluación que sustenta las decisiones curriculares.</li>
+  <li>Reportas al comité curricular lo que la experiencia del aula muestra que debe ajustarse.</li>
+</ul>
+
+<h4>Si trabajas en una dependencia administrativa</h4>
+<ul>
+  <li>Ejecutas tu proceso conforme al procedimiento vigente y usas los formatos aprobados, no versiones locales.</li>
+  <li>Registras la evidencia en el momento, no al cierre del semestre.</li>
+  <li>Cuando el procedimiento no refleja la realidad, solicitas su actualización en vez de trabajar por fuera de él.</li>
+</ul>
+
+<h4>Si lideras un equipo o un proceso</h4>
+<ul>
+  <li>Conoces los indicadores de tu proceso y su comportamiento reciente.</li>
+  <li>Aseguras que las acciones de mejora a tu cargo tengan responsable, fecha y evidencia de cierre.</li>
+  <li>Incorporas la inducción al SIGC en el ingreso de cada persona nueva a tu equipo.</li>
+</ul>
+
+<div class="destacado">
+  <h4>Tres conductas mínimas, aplicables a cualquier cargo</h4>
+  <ol style="margin-bottom:0">
+    <li>Usar siempre la versión vigente del documento, consultada en el repositorio oficial.</li>
+    <li>Dejar evidencia de lo que se hace, en el formato y el momento previstos.</li>
+    <li>Reportar lo que no funciona por el canal del sistema, en lugar de resolverlo de manera informal y no trazable.</li>
+  </ol>
+</div>`,
+        preguntas: [
+          { q: "Un colaborador detecta que el procedimiento vigente ya no corresponde a cómo se ejecuta realmente el proceso. ¿Qué conducta es coherente con la política?",
+            ops: ["Seguir trabajando como en la práctica y esperar la próxima auditoría.",
+                  "Redactar una versión propia del formato para su dependencia.",
+                  "Solicitar la actualización del procedimiento por el canal establecido.",
+                  "Documentar el cambio en un correo interno y continuar."],
+            r: 2,
+            exp: "El sistema prevé la actualización documental; trabajar por fuera del documento vigente rompe la trazabilidad." },
+          { q: "¿Cuál de estas prácticas contradice el compromiso de dejar evidencia?",
+            ops: ["Registrar la información en el formato aprobado al momento de ejecutar la actividad.",
+                  "Reconstruir los registros al final del semestre a partir de la memoria del equipo.",
+                  "Archivar las actas firmadas en el repositorio del proceso.",
+                  "Usar la versión vigente del formato descargada del repositorio oficial."],
+            r: 1,
+            exp: "La evidencia reconstruida a posteriori pierde valor probatorio y suele generar hallazgos en auditoría." }
+        ]
+      }
+    ]
+  },
+  /* ================= MÓDULO 3 ================= */
+  {
+    id: "m3",
+    titulo: "Objetivos de calidad y su medición",
+    resumen: "Cómo la política se convierte en objetivos medibles y cómo se hace seguimiento a su cumplimiento.",
+    lecciones: [
+      {
+        id: "l07", codigo: "IND-SIGC-L07",
+        titulo: "De la política a los objetivos de calidad",
+        objetivo: "Reconocer qué hace que un objetivo de calidad sea válido y cómo se articula con el Plan de Desarrollo Institucional.",
+        html: `
+<p>Los <strong>objetivos de calidad</strong> son el puente entre la declaración de la política y el trabajo cotidiano. Traducen un compromiso general en un resultado que se puede medir, con un plazo y un responsable.</p>
+
+<h3>Qué hace válido a un objetivo</h3>
+<ul>
+  <li><strong>Es coherente con la política.</strong> Cada objetivo debe poder rastrearse hasta uno de los compromisos declarados.</li>
+  <li><strong>Es medible.</strong> Existe al menos un indicador con fórmula y fuente de datos definida.</li>
+  <li><strong>Tiene meta y plazo.</strong> Un objetivo sin meta no permite saber si se cumplió.</li>
+  <li><strong>Tiene responsable.</strong> Un proceso o un cargo, no un colectivo difuso.</li>
+  <li><strong>Se despliega.</strong> Cada división o dependencia sabe qué le corresponde aportar.</li>
+</ul>
+
+<h3>Articulación con el Plan de Desarrollo Institucional</h3>
+<p>Los objetivos de calidad no compiten con el PDI: lo sirven. El PDI fija hacia dónde va la Universidad en el horizonte de planeación; los objetivos de calidad aseguran que los procesos que sostienen ese rumbo se desempeñen como deben. En la práctica, muchos indicadores son compartidos y se reportan una sola vez.</p>
+
+<table>
+  <thead><tr><th style="width:32%">Compromiso de la política</th><th style="width:38%">Objetivo de calidad</th><th>Indicador asociado</th></tr></thead>
+  <tbody>
+    <tr><td>Excelencia académica</td><td>Mantener vigente la acreditación de los programas acreditables.</td><td>Programas acreditados sobre programas acreditables.</td></tr>
+    <tr><td>Enfoque en los grupos de interés</td><td>Elevar la satisfacción de los estudiantes con los servicios de apoyo.</td><td>Índice de satisfacción por servicio.</td></tr>
+    <tr><td>Mejora continua</td><td>Cerrar oportunamente las acciones derivadas de autoevaluación y auditoría.</td><td>Acciones cerradas en la fecha comprometida.</td></tr>
+  </tbody>
+</table>
+
+<div class="pendiente">
+  <p><b>Ejemplos ilustrativos.</b> Reemplazar por los objetivos de calidad vigentes aprobados y su correspondencia con el PDI: <b>[Pendiente]</b>.</p>
+</div>`,
+        preguntas: [
+          { q: "Se propone como objetivo de calidad: fortalecer la cultura de calidad en la comunidad universitaria. ¿Cuál es su principal debilidad?",
+            ops: ["No está alineado con la política de calidad.",
+                  "No es medible ni tiene meta, por lo que no permite verificar cumplimiento.",
+                  "Corresponde al PDI y no al SIGC.",
+                  "No menciona la norma que lo sustenta."],
+            r: 1,
+            exp: "Es una intención bien orientada pero sin indicador, meta ni plazo; no permite evaluar cumplimiento." },
+          { q: "¿Cuál es la relación entre los objetivos de calidad y el Plan de Desarrollo Institucional?",
+            ops: ["Son sistemas de medición independientes que se reportan por separado.",
+                  "El PDI reemplaza a los objetivos de calidad durante su vigencia.",
+                  "Los objetivos de calidad aseguran el desempeño de los procesos que sostienen las metas del PDI, y suelen compartir indicadores.",
+                  "Los objetivos de calidad aplican solo a procesos administrativos y el PDI solo a los académicos."],
+            r: 2,
+            exp: "Son complementarios y en buena parte comparten indicadores para evitar doble reporte." }
+        ]
+      },
+
+      {
+        id: "l08", codigo: "IND-SIGC-L08",
+        titulo: "Indicadores, metas y revisión por la dirección",
+        objetivo: "Leer la ficha técnica de un indicador y entender el ciclo de reporte y revisión del desempeño.",
+        html: `
+<p>Un indicador sin ficha técnica se presta a interpretaciones distintas cada vez que se calcula. Por eso todo indicador del sistema se define antes de medirse.</p>
+
+<h3>La ficha técnica de un indicador</h3>
+<table>
+  <thead><tr><th style="width:30%">Campo</th><th>Para qué sirve</th></tr></thead>
+  <tbody>
+    <tr><td>Nombre</td><td>Identifica qué se mide, en términos del resultado y no de la actividad.</td></tr>
+    <tr><td>Fórmula</td><td>Define numerador y denominador sin ambigüedad.</td></tr>
+    <tr><td>Unidad y frecuencia</td><td>Establece cada cuánto se calcula: mensual, semestral, anual.</td></tr>
+    <tr><td>Fuente de datos</td><td>Señala el sistema o registro del que se extrae la cifra.</td></tr>
+    <tr><td>Meta</td><td>El valor esperado en el periodo.</td></tr>
+    <tr><td>Responsable</td><td>Quién lo calcula y quién responde por el resultado.</td></tr>
+    <tr><td>Interpretación</td><td>Qué significa que suba o baje, para evitar lecturas erróneas.</td></tr>
+  </tbody>
+</table>
+
+<h3>Del dato a la decisión</h3>
+<p>Medir no es el objetivo. El ciclo se completa cuando el resultado provoca una decisión:</p>
+<ol>
+  <li>Se calcula el indicador con la frecuencia definida.</li>
+  <li>Se compara con la meta y con el comportamiento histórico.</li>
+  <li>Si hay desviación, se analiza la causa; no se corrige el número, se corrige el proceso.</li>
+  <li>Se formula una acción de mejora cuando la causa es atribuible y evitable.</li>
+  <li>Los resultados se presentan en la <strong>revisión por la dirección</strong>, donde se deciden ajustes de recursos, metas o alcance.</li>
+</ol>
+
+<div class="destacado">
+  <h4>Señal de alerta</h4>
+  <p>Cuando un indicador lleva varios periodos cumpliendo la meta con holgura, lo que suele estar desactualizado es la meta, no el desempeño. Revisar metas también es mejora continua.</p>
+</div>`,
+        preguntas: [
+          { q: "Dos dependencias reportan cifras distintas para el mismo indicador. ¿Cuál es la causa más probable?",
+            ops: ["Una de las dos cometió un error de digitación.",
+                  "La ficha técnica no define con precisión la fórmula y la fuente de datos.",
+                  "El indicador se está midiendo con demasiada frecuencia.",
+                  "La meta establecida es inalcanzable."],
+            r: 1,
+            exp: "La ficha técnica existe justamente para que el cálculo no dependa de quién lo haga." },
+          { q: "Un indicador supera ampliamente su meta durante cinco periodos consecutivos. La lectura más adecuada es:",
+            ops: ["El proceso es excelente y no requiere atención.",
+                  "Debe eliminarse el indicador porque ya no aporta información.",
+                  "Conviene revisar si la meta sigue siendo exigente y pertinente.",
+                  "Debe reportarse como no conformidad por exceso de cumplimiento."],
+            r: 2,
+            exp: "Una meta que nunca se pone a prueba deja de informar sobre el desempeño." }
+        ]
+      }
+    ]
+  },
+
+  /* ================= MÓDULO 4 ================= */
+  {
+    id: "m4",
+    titulo: "Arquitectura institucional del SIGC",
+    resumen: "El mapa de procesos, la jerarquía documental con su codificación y los roles que gobiernan el sistema.",
+    lecciones: [
+      {
+        id: "l09", codigo: "IND-SIGC-L09",
+        titulo: "El mapa de procesos",
+        objetivo: "Ubicar el propio proceso en una de las cuatro tipologías del mapa y explicar cómo se relaciona con los demás.",
+        html: `
+<p>El <strong>mapa de procesos</strong> es la representación de cómo la Universidad convierte las necesidades de sus grupos de interés en resultados. Organiza el trabajo en cuatro tipologías y muestra que ningún proceso opera aislado.</p>
+
+<figure>
+<svg viewBox="0 0 720 400" role="img" aria-label="Mapa de procesos con cuatro tipologías: estratégicos, misionales, de apoyo y de evaluación y mejora" style="width:100%;height:auto;border:1px solid #DCE3EA;background:#fff">
+  <text x="14" y="30" font-family="Libre Franklin,sans-serif" font-size="12" fill="#5B6B7C">Necesidades y</text>
+  <text x="14" y="46" font-family="Libre Franklin,sans-serif" font-size="12" fill="#5B6B7C">expectativas</text>
+  <path d="M14 60 L14 340" stroke="#DCE3EA" stroke-width="2"/>
+  <text x="640" y="30" font-family="Libre Franklin,sans-serif" font-size="12" fill="#5B6B7C">Grupos de</text>
+  <text x="640" y="46" font-family="Libre Franklin,sans-serif" font-size="12" fill="#5B6B7C">interés satisfechos</text>
+  <path d="M706 60 L706 340" stroke="#DCE3EA" stroke-width="2"/>
+
+  <rect x="40" y="60" width="650" height="70" fill="#00234B"/>
+  <text x="60" y="88" font-family="Libre Franklin,sans-serif" font-size="14" font-weight="600" fill="#fff">Procesos estratégicos</text>
+  <text x="60" y="110" font-family="Libre Franklin,sans-serif" font-size="12.5" fill="#9FBBD1">Direccionamiento institucional · Planeación · Gestión de la calidad · Comunicaciones</text>
+
+  <rect x="40" y="145" width="650" height="90" fill="#0B6FB4"/>
+  <text x="60" y="173" font-family="Libre Franklin,sans-serif" font-size="14" font-weight="600" fill="#fff">Procesos misionales</text>
+  <text x="60" y="195" font-family="Libre Franklin,sans-serif" font-size="12.5" fill="#D6ECF8">Docencia y gestión curricular · Investigación · Extensión y proyección social</text>
+  <text x="60" y="215" font-family="Libre Franklin,sans-serif" font-size="12.5" fill="#D6ECF8">Gestión del estudiante, del ingreso al egreso</text>
+
+  <rect x="40" y="250" width="650" height="70" fill="#E7EEF5" stroke="#C8D6E2"/>
+  <text x="60" y="278" font-family="Libre Franklin,sans-serif" font-size="14" font-weight="600" fill="#00234B">Procesos de apoyo</text>
+  <text x="60" y="300" font-family="Libre Franklin,sans-serif" font-size="12.5" fill="#41586C">Gestión humana · Financiera · Tecnología · Bibliotecas · Infraestructura · Compras · Jurídica</text>
+
+  <rect x="40" y="335" width="650" height="48" fill="#fff" stroke="#F0B323" stroke-width="2"/>
+  <text x="60" y="358" font-family="Libre Franklin,sans-serif" font-size="14" font-weight="600" fill="#8A6200">Procesos de evaluación y mejora</text>
+  <text x="60" y="375" font-family="Libre Franklin,sans-serif" font-size="12.5" fill="#8A6200">Autoevaluación · Auditorías internas · Gestión de acciones de mejora</text>
+</svg>
+<figcaption>Estructura de referencia del mapa de procesos. La denominación exacta de cada proceso debe tomarse del mapa oficial vigente.</figcaption>
+</figure>
+
+<h3>Qué hace cada tipología</h3>
+<ul>
+  <li><strong>Estratégicos:</strong> definen el rumbo y las reglas. Deciden qué se hace y con qué prioridades.</li>
+  <li><strong>Misionales:</strong> entregan el valor por el que existe la Universidad. Son los que el estudiante o el aliado percibe directamente.</li>
+  <li><strong>De apoyo:</strong> proveen recursos, información y condiciones. Su falla se convierte siempre en una falla misional.</li>
+  <li><strong>De evaluación y mejora:</strong> miran al sistema desde afuera y devuelven hallazgos. Cierran el ciclo.</li>
+</ul>
+
+<div class="destacado">
+  <p>La tipología no indica jerarquía ni importancia. Un proceso de apoyo mal ejecutado degrada el resultado misional con la misma severidad que un error en el aula.</p>
+</div>
+
+<div class="pendiente">
+  <p><b>Pendiente.</b> Sustituir el diagrama por el mapa de procesos oficial vigente de Uninorte, con los nombres y códigos exactos de cada proceso: <b>[Pendiente]</b>.</p>
+</div>`,
+        preguntas: [
+          { q: "La gestión de la infraestructura tecnológica corresponde a un proceso:",
+            ops: ["Estratégico, porque define el rumbo institucional.",
+                  "Misional, porque los estudiantes usan las plataformas.",
+                  "De apoyo, porque provee condiciones y recursos a los demás procesos.",
+                  "De evaluación y mejora, porque monitorea el desempeño de los sistemas."],
+            r: 2,
+            exp: "Provee condiciones para que otros procesos operen: es de apoyo, aunque su falla afecte directamente lo misional." },
+          { q: "¿Cuál es la función de los procesos de evaluación y mejora dentro del mapa?",
+            ops: ["Ejecutar las funciones sustantivas de la Universidad.",
+                  "Aprobar los documentos del sistema.",
+                  "Producir hallazgos sobre el desempeño del sistema y alimentar las acciones de mejora.",
+                  "Asignar los recursos financieros a los demás procesos."],
+            r: 2,
+            exp: "Su papel es cerrar el ciclo: observar el sistema y devolverle información para que se corrija." }
+        ]
+      },
+
+      {
+        id: "l10", codigo: "IND-SIGC-L10",
+        titulo: "Jerarquía documental y codificación",
+        objetivo: "Interpretar un código documental del SIGC y saber qué tipo de documento consultar según la necesidad.",
+        html: `
+<p>Los documentos del sistema se organizan en niveles. Cada nivel responde una pregunta distinta, y confundirlos es la causa más común de documentos que nadie usa.</p>
+
+<figure>
+<svg viewBox="0 0 640 330" role="img" aria-label="Pirámide documental del SIGC: política, manual y caracterizaciones, procedimientos, instructivos, formatos y registros" style="width:100%;height:auto;border:1px solid #DCE3EA;background:#fff">
+  <polygon points="320,20 400,80 240,80" fill="#00234B"/>
+  <text x="320" y="62" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="12" font-weight="600" fill="#fff">Política</text>
+
+  <polygon points="238,85 402,85 442,145 198,145" fill="#00417A"/>
+  <text x="320" y="112" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="12.5" font-weight="600" fill="#fff">Manual y caracterizaciones</text>
+  <text x="320" y="131" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="11.5" fill="#9FBBD1">Qué es el sistema y qué hace cada proceso</text>
+
+  <polygon points="196,150 444,150 484,210 156,210" fill="#0B6FB4"/>
+  <text x="320" y="177" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="12.5" font-weight="600" fill="#fff">Procedimientos</text>
+  <text x="320" y="196" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="11.5" fill="#D6ECF8">Quién hace qué, en qué orden y con qué evidencia</text>
+
+  <polygon points="154,215 486,215 516,265 124,265" fill="#69B3DE"/>
+  <text x="320" y="240" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="12.5" font-weight="600" fill="#08375F">Instructivos y guías</text>
+  <text x="320" y="257" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="11.5" fill="#08375F">Cómo se ejecuta una actividad en detalle</text>
+
+  <rect x="122" y="270" width="396" height="46" fill="#E7EEF5" stroke="#C8D6E2"/>
+  <text x="320" y="291" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="12.5" font-weight="600" fill="#00234B">Formatos y registros</text>
+  <text x="320" y="308" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="11.5" fill="#41586C">La evidencia de que la actividad ocurrió</text>
+</svg>
+<figcaption>A mayor altura, mayor estabilidad: la política cambia rara vez; los registros se generan todos los días.</figcaption>
+</figure>
+
+<h3>Cómo se lee un código</h3>
+<p>Los documentos se identifican con una estructura de tres partes, por ejemplo <strong>FOES-PR-007</strong>:</p>
+<table>
+  <thead><tr><th style="width:22%">Parte</th><th style="width:18%">Ejemplo</th><th>Significado</th></tr></thead>
+  <tbody>
+    <tr><td>Prefijo del proceso</td><td>FOES</td><td>Identifica el proceso al que pertenece el documento.</td></tr>
+    <tr><td>Tipo de documento</td><td>PR</td><td>PR procedimiento · IN instructivo · FT formato · MA manual · CP caracterización · GU guía.</td></tr>
+    <tr><td>Consecutivo</td><td>007</td><td>Número asignado por el control documental, no elegido por el autor.</td></tr>
+  </tbody>
+</table>
+
+<p>Los prefijos en uso incluyen <strong>FOES, PLIN, GDOC, GCCS, SEME</strong> y <strong>ADMI</strong>, entre otros. Cuando aún no se ha asignado un código, la convención institucional es escribir <strong>[Pendiente]</strong> en el documento: nunca inventar un consecutivo, porque un número duplicado rompe la trazabilidad del control documental.</p>
+
+<h3>Versión, vigencia y control</h3>
+<ul>
+  <li>Un documento solo es válido en su <strong>versión vigente publicada</strong> en el repositorio oficial.</li>
+  <li>Las copias descargadas o impresas se consideran <strong>no controladas</strong>: sirven para consultar, no para decidir.</li>
+  <li>Cada cambio genera una nueva versión con fecha y descripción de la modificación.</li>
+</ul>
+
+<div class="destacado">
+  <h4>Regla práctica</h4>
+  <p>Si necesitas saber quién aprueba algo y en qué orden, busca un procedimiento. Si necesitas saber cómo se diligencia un campo específico, busca un instructivo. Si necesitas dejar constancia, usa el formato.</p>
+</div>`,
+        preguntas: [
+          { q: "En el código GCCS-PR-012, la sigla PR indica:",
+            ops: ["El proceso al que pertenece el documento.",
+                  "Que se trata de un procedimiento.",
+                  "El número de versión del documento.",
+                  "Que el documento está pendiente de aprobación."],
+            r: 1,
+            exp: "El prefijo identifica el proceso, la sigla del centro identifica el tipo de documento y el número final es el consecutivo." },
+          { q: "Estás elaborando un procedimiento nuevo y aún no tienes el consecutivo asignado. ¿Qué corresponde hacer?",
+            ops: ["Asignar el siguiente número disponible según los documentos que conoces.",
+                  "Escribir [Pendiente] y solicitar la asignación al control documental.",
+                  "Usar un código provisional con las iniciales del autor.",
+                  "Publicar el documento sin código hasta que alguien lo note."],
+            r: 1,
+            exp: "La convención institucional evita consecutivos duplicados: se deja [Pendiente] hasta la asignación formal." }
+        ]
+      },
+
+      {
+        id: "l11", codigo: "IND-SIGC-L11",
+        titulo: "Roles, comités y herramientas del sistema",
+        objetivo: "Identificar quién responde por qué dentro del SIGC y en qué herramienta se registra cada cosa.",
+        html: `
+<p>El sistema funciona porque las responsabilidades están repartidas y son explícitas. Estas son las figuras que conviene reconocer desde el primer día.</p>
+
+<table>
+  <thead><tr><th style="width:32%">Rol</th><th>De qué responde</th></tr></thead>
+  <tbody>
+    <tr><td>Alta dirección</td><td>Aprueba la política y los objetivos, asigna recursos y lidera la revisión por la dirección.</td></tr>
+    <tr><td>Dirección de Calidad y Proyectos Académicos (DCPA)</td><td>Administra el sistema: control documental, metodología, acompañamiento a procesos, consolidación de acciones y preparación de procesos de acreditación.</td></tr>
+    <tr><td>Líder de proceso</td><td>Responde por el desempeño de su proceso, sus indicadores, sus riesgos y sus acciones de mejora.</td></tr>
+    <tr><td>Responsable de documento</td><td>Mantiene actualizado el contenido de los documentos de su proceso y solicita sus cambios.</td></tr>
+    <tr><td>Comités (curricular, de división, de programa, directivos)</td><td>Deciden en su ámbito y dejan constancia en actas, que son evidencia del sistema.</td></tr>
+    <tr><td>Auditor interno</td><td>Verifica de forma independiente y reporta hallazgos; no ejecuta ni corrige el proceso auditado.</td></tr>
+    <tr><td>Colaborador</td><td>Ejecuta conforme al documento vigente, deja evidencia y reporta lo que no funciona.</td></tr>
+  </tbody>
+</table>
+
+<h3>Dónde vive cada cosa</h3>
+<ul>
+  <li><strong>ISOLUCION:</strong> herramienta donde se gestionan las acciones de mejora, correctivas y preventivas, con su seguimiento, fechas y evidencias de cierre.</li>
+  <li><strong>Repositorio documental institucional:</strong> única fuente válida de los documentos vigentes del sistema.</li>
+  <li><strong>Actas de comité:</strong> soporte de las decisiones académicas y administrativas que el sistema exige demostrar.</li>
+</ul>
+
+<div class="destacado">
+  <h4>Una confusión que conviene evitar</h4>
+  <p>El auditor no es quien resuelve el hallazgo. Su función termina cuando lo reporta con evidencia; la corrección corresponde siempre al líder del proceso auditado.</p>
+</div>
+
+<div class="pendiente">
+  <p><b>Pendiente.</b> Confirmar la denominación vigente de los comités institucionales, los roles formales del SIGC y las herramientas oficiales en uso, con sus enlaces de acceso: <b>[Pendiente]</b>.</p>
+</div>`,
+        preguntas: [
+          { q: "Un auditor interno detecta un incumplimiento en el proceso de admisiones. ¿Qué le corresponde hacer?",
+            ops: ["Corregir directamente el procedimiento afectado.",
+                  "Reportar el hallazgo con su evidencia; la acción correctiva corresponde al líder del proceso.",
+                  "Suspender la ejecución del proceso hasta que se resuelva.",
+                  "Escalar el caso a la alta dirección sin registrarlo."],
+            r: 1,
+            exp: "La independencia de la auditoría se pierde si el auditor participa en la corrección de lo que audita." },
+          { q: "¿Cuál es la fuente válida para consultar un procedimiento antes de ejecutarlo?",
+            ops: ["La copia en PDF guardada en la carpeta compartida del equipo.",
+                  "La versión impresa que reposa en la oficina del líder.",
+                  "El repositorio documental institucional, donde está la versión vigente.",
+                  "El correo en el que se socializó la última actualización."],
+            r: 2,
+            exp: "Las copias descargadas o impresas son documentos no controlados y pueden estar desactualizadas." }
+        ]
+      }
+    ]
+  },
+
+  /* ================= MÓDULO 5 ================= */
+  {
+    id: "m5",
+    titulo: "Tu rol en la mejora continua",
+    resumen: "El ciclo PHVA, la formulación correcta de acciones y el camino para crear o actualizar un documento.",
+    lecciones: [
+      {
+        id: "l12", codigo: "IND-SIGC-L12",
+        titulo: "El ciclo PHVA aplicado",
+        objetivo: "Reconocer las cuatro fases del ciclo y detectar en cuál suele romperse el trabajo cotidiano.",
+        html: `
+<p>El ciclo <strong>PHVA</strong> —planear, hacer, verificar, actuar— es la lógica que estructura todo el sistema: desde la planeación institucional hasta la acción de mejora más pequeña.</p>
+
+<figure>
+<svg viewBox="0 0 560 300" role="img" aria-label="Ciclo PHVA con sus cuatro fases" style="width:100%;height:auto;border:1px solid #DCE3EA;background:#fff">
+  <circle cx="280" cy="150" r="112" fill="none" stroke="#DCE3EA" stroke-width="26"/>
+  <path d="M280 38 A112 112 0 0 1 392 150" fill="none" stroke="#00234B" stroke-width="26"/>
+  <path d="M392 150 A112 112 0 0 1 280 262" fill="none" stroke="#0B6FB4" stroke-width="26"/>
+  <path d="M280 262 A112 112 0 0 1 168 150" fill="none" stroke="#69B3DE" stroke-width="26"/>
+  <path d="M168 150 A112 112 0 0 1 280 38" fill="none" stroke="#F0B323" stroke-width="26"/>
+
+  <text x="352" y="80" font-family="Libre Franklin,sans-serif" font-size="13" font-weight="600" fill="#00234B">Planear</text>
+  <text x="352" y="230" font-family="Libre Franklin,sans-serif" font-size="13" font-weight="600" fill="#0B6FB4">Hacer</text>
+  <text x="128" y="230" font-family="Libre Franklin,sans-serif" font-size="13" font-weight="600" fill="#31789E">Verificar</text>
+  <text x="128" y="80" font-family="Libre Franklin,sans-serif" font-size="13" font-weight="600" fill="#8A6200">Actuar</text>
+
+  <text x="280" y="132" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="13" font-weight="600" fill="#16202B">Mejora</text>
+  <text x="280" y="152" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="13" font-weight="600" fill="#16202B">continua</text>
+  <text x="280" y="176" text-anchor="middle" font-family="Libre Franklin,sans-serif" font-size="11.5" fill="#5B6B7C">del proceso</text>
+</svg>
+<figcaption>Cada acción de mejora del sistema debe poder describirse en estas cuatro fases.</figcaption>
+</figure>
+
+<table>
+  <thead><tr><th style="width:16%">Fase</th><th style="width:42%">Qué se hace</th><th>Evidencia esperada</th></tr></thead>
+  <tbody>
+    <tr><td>Planear</td><td>Definir el problema, analizar sus causas y formular el plan de actividades con responsables y fechas.</td><td>Análisis de causas y plan de acción.</td></tr>
+    <tr><td>Hacer</td><td>Ejecutar las actividades planeadas.</td><td>Registros de ejecución y seguimientos.</td></tr>
+    <tr><td>Verificar</td><td>Comprobar si el problema desapareció, con datos y no con percepciones.</td><td>Indicador medido después de la acción.</td></tr>
+    <tr><td>Actuar</td><td>Estandarizar lo que funcionó o reformular si no funcionó.</td><td>Documento actualizado, cierre con evidencia.</td></tr>
+  </tbody>
+</table>
+
+<div class="destacado">
+  <h4>Dónde se rompe casi siempre</h4>
+  <p>En la verificación. Muchas acciones se declaran cerradas cuando se ejecutaron las actividades, sin comprobar si el problema efectivamente desapareció. Ejecutar no es lo mismo que resolver.</p>
+</div>`,
+        preguntas: [
+          { q: "Una acción de mejora ejecutó todas sus actividades en las fechas previstas. ¿Basta para cerrarla?",
+            ops: ["Sí, la ejecución completa es el criterio de cierre.",
+                  "Sí, siempre que el responsable lo autorice.",
+                  "No: falta verificar con datos que el problema que la originó desapareció.",
+                  "No: falta que la auditoría interna la revise."],
+            r: 2,
+            exp: "El cierre exige evidencia de eficacia, es decir, la fase de verificación del ciclo." },
+          { q: "En qué fase del PHVA se ubica el análisis de causas de un problema:",
+            ops: ["Planear.", "Hacer.", "Verificar.", "Actuar."],
+            r: 0,
+            exp: "El análisis de causas antecede a la formulación del plan de actividades, dentro de la fase de planeación." }
+        ]
+      },
+
+      {
+        id: "l13", codigo: "IND-SIGC-L13",
+        titulo: "Acciones de mejora bien formuladas",
+        objetivo: "Formular actividades y seguimientos que resistan una revisión de calidad, evitando los errores más frecuentes.",
+        html: `
+<p>Buena parte de los hallazgos que se repiten no vienen de procesos mal ejecutados, sino de acciones mal formuladas. Estos son los criterios con que se revisan las acciones del periodo.</p>
+
+<h3>Criterios de una acción bien formulada</h3>
+<ol>
+  <li><strong>Coherencia con el problema y sus causas.</strong> Cada actividad debe atacar una causa identificada. Si una actividad no se conecta con ninguna causa, sobra o el análisis quedó incompleto.</li>
+  <li><strong>Redacción en infinitivo.</strong> Las actividades se redactan como acción concreta: actualizar, socializar, ajustar, verificar. Se evita el enunciado de intenciones o los sustantivos sueltos.</li>
+  <li><strong>Cobertura del ciclo PHVA.</strong> El plan debe incluir actividades de ejecución y también de verificación de la eficacia.</li>
+  <li><strong>Fechas de compromiso realistas y vigentes.</strong> Una fecha vencida sin reprogramación formal es un incumplimiento visible.</li>
+  <li><strong>Seguimientos con contenido.</strong> El seguimiento describe qué se hizo y con qué evidencia; no repite el enunciado de la actividad.</li>
+  <li><strong>Evidencia verificable.</strong> Se referencia el documento, acta o registro que respalda lo reportado.</li>
+  <li><strong>Cierre oportuno.</strong> Se cierra cuando hay evidencia de eficacia, no cuando se agota el plazo.</li>
+</ol>
+
+<h3>Antes y después</h3>
+<table>
+  <thead><tr><th style="width:50%">Formulación débil</th><th>Formulación adecuada</th></tr></thead>
+  <tbody>
+    <tr><td>Mejorar la comunicación con los estudiantes.</td><td>Actualizar el instructivo de atención al estudiante e incorporar el canal de respuesta en 48 horas, socializándolo con el equipo de atención.</td></tr>
+    <tr><td>Seguimiento: se viene trabajando en la actividad.</td><td>Seguimiento: se realizó la socialización el 14 de marzo con 22 asistentes; evidencia en el acta [Pendiente] y lista de asistencia.</td></tr>
+    <tr><td>Capacitación al personal.</td><td>Capacitar al equipo de admisiones en el procedimiento ADMI-PR-[Pendiente] y verificar su aplicación mediante revisión de diez expedientes.</td></tr>
+  </tbody>
+</table>
+
+<div class="destacado">
+  <h4>La prueba de la lectura ajena</h4>
+  <p>Si alguien que no participó en la acción no puede entender qué se hizo y dónde está la evidencia leyendo solo el seguimiento, el seguimiento está incompleto.</p>
+</div>`,
+        preguntas: [
+          { q: "¿Cuál de estos seguimientos cumple el criterio de contenido verificable?",
+            ops: ["Se continúa avanzando en la actividad según lo programado.",
+                  "La actividad se encuentra en un 60 por ciento de ejecución.",
+                  "Se socializó el procedimiento el 14 de marzo con 22 asistentes; evidencia en acta y lista de asistencia.",
+                  "Se solicitó apoyo al área responsable para poder avanzar."],
+            r: 2,
+            exp: "Describe qué se hizo, cuándo, con qué alcance y dónde está la evidencia." },
+          { q: "La actividad Mejorar la comunicación con los estudiantes es débil principalmente porque:",
+            ops: ["No está redactada en infinitivo.",
+                  "No especifica una acción concreta ni una evidencia verificable.",
+                  "No menciona la norma que la sustenta.",
+                  "No indica el presupuesto requerido."],
+            r: 1,
+            exp: "Aunque usa un infinitivo, enuncia un propósito general sin acción concreta ni entregable verificable." }
+        ]
+      },
+
+      {
+        id: "l14", codigo: "IND-SIGC-L14",
+        titulo: "Cómo se crea o actualiza un documento",
+        objetivo: "Seguir la ruta institucional para formalizar un procedimiento nuevo o una modificación, sin saltarse el control documental.",
+        html: `
+<p>Cuando el trabajo real y el documento vigente dejan de coincidir, hay dos caminos: trabajar por fuera del sistema, o actualizar el documento. El segundo es el único trazable.</p>
+
+<h3>La ruta, paso a paso</h3>
+<ol>
+  <li><strong>Identificar la necesidad.</strong> Un cambio normativo, un rediseño del proceso, un hallazgo de auditoría o una actividad que en la práctica ya se ejecuta distinto.</li>
+  <li><strong>Solicitar al control documental.</strong> Se informa a la DCPA para verificar si el documento existe, si corresponde crear uno nuevo o modificar el vigente, y para asignar el código.</li>
+  <li><strong>Redactar en el formato institucional.</strong> Los procedimientos usan la estructura de seis columnas: número, actividad, descripción de las actividades, responsable, documentos que se deben utilizar y evidencias que se deben generar.</li>
+  <li><strong>Revisar con los responsables.</strong> Quienes ejecutan el proceso validan que lo escrito sea ejecutable; quienes aprueban revisan competencias y controles.</li>
+  <li><strong>Aprobar y codificar.</strong> El documento recibe versión, fecha de vigencia y código definitivo.</li>
+  <li><strong>Publicar y socializar.</strong> Se carga en el repositorio oficial y se comunica a quienes deben aplicarlo. Un documento aprobado y no socializado no cambia la práctica.</li>
+  <li><strong>Revisar periódicamente.</strong> Cada documento tiene una revisión programada, aunque no haya cambios.</li>
+</ol>
+
+<h3>Errores frecuentes</h3>
+<ul>
+  <li>Describir el proceso ideal en lugar del proceso real: genera un documento que nadie sigue.</li>
+  <li>Redactar responsables como nombres propios en vez de cargos: el documento caduca con la primera rotación.</li>
+  <li>Omitir la columna de evidencias: sin ella, el procedimiento no es auditable.</li>
+  <li>Inventar el consecutivo del código en lugar de dejar <strong>[Pendiente]</strong>.</li>
+</ul>
+
+<div class="destacado">
+  <h4>Con esto cierras la inducción</h4>
+  <p>Ya sabes qué es el SIGC, sobre qué se apoya, qué declara la política, cómo se mide, cómo está organizado y qué se espera de ti. Lo que queda es la evaluación final, que da lugar a tu constancia.</p>
+</div>
+
+<div class="pendiente">
+  <p><b>Pendiente.</b> Enlazar el formato oficial de solicitud de creación o modificación documental y el correo o formulario de contacto del control documental de la DCPA: <b>[Pendiente]</b>.</p>
+</div>`,
+        preguntas: [
+          { q: "¿Por qué los responsables de un procedimiento se escriben como cargos y no como nombres de personas?",
+            ops: ["Por política de protección de datos personales.",
+                  "Para que el documento siga siendo válido cuando cambien las personas del cargo.",
+                  "Porque el formato institucional no permite nombres propios.",
+                  "Para reducir la extensión del documento."],
+            r: 1,
+            exp: "El documento describe el proceso, que sobrevive a la rotación de personas." },
+          { q: "Un documento fue aprobado y publicado, pero el equipo sigue trabajando como antes. ¿Qué paso de la ruta falló?",
+            ops: ["La identificación de la necesidad.",
+                  "La asignación del código.",
+                  "La socialización con quienes deben aplicarlo.",
+                  "La revisión periódica programada."],
+            r: 2,
+            exp: "Publicar no es socializar: sin comunicación efectiva, el documento no cambia la práctica." }
+        ]
+      }
+    ]
+  }
+  ]
+};
+
+/* Evaluación final: banco de preguntas transversales */
+const EXAMEN = {
+  codigo: "IND-SIGC-EV",
+  minimo: 9,
+  preguntas: [
+    { q: "El SIGC se define mejor como:",
+      ops: ["El conjunto de documentos y formatos aprobados.",
+            "El sistema articulado con que la Universidad planea, ejecuta, verifica y mejora su trabajo.",
+            "El programa de auditorías internas.",
+            "La dependencia responsable de la acreditación."], r: 1,
+      exp: "Es el sistema completo de gestión, no uno de sus componentes." },
+    { q: "El Decreto 1330 de 2019 aporta al sistema principalmente:",
+      ops: ["El modelo de acreditación por factores.",
+            "Las condiciones de calidad y la exigencia de un sistema interno de aseguramiento.",
+            "La creación del Consejo Nacional de Acreditación.",
+            "Los lineamientos de la evaluación docente."], r: 1,
+      exp: "Define condiciones de calidad institucionales y de programa, incluido el sistema interno de aseguramiento." },
+    { q: "El SIACA es:",
+      ops: ["Un sistema independiente del SIGC.",
+            "El componente académico dentro del SIGC.",
+            "La herramienta de gestión de acciones de mejora.",
+            "El repositorio documental institucional."], r: 1,
+      exp: "Comparte política, procesos y control documental con el SIGC." },
+    { q: "Un objetivo de calidad válido debe, ante todo:",
+      ops: ["Estar redactado en infinitivo.",
+            "Ser medible, con meta, plazo y responsable.",
+            "Haber sido propuesto por la DCPA.",
+            "Coincidir literalmente con un factor de acreditación."], r: 1,
+      exp: "Sin medición ni meta no es posible verificar cumplimiento." },
+    { q: "La ficha técnica de un indicador existe para:",
+      ops: ["Justificar la meta ante la alta dirección.",
+            "Evitar que el resultado dependa de quién haga el cálculo.",
+            "Reemplazar el reporte al Plan de Desarrollo Institucional.",
+            "Documentar las acciones de mejora asociadas."], r: 1,
+      exp: "Define fórmula, fuente y frecuencia para que la medición sea reproducible." },
+    { q: "La gestión documental y la gestión humana son procesos:",
+      ops: ["Estratégicos.", "Misionales.", "De apoyo.", "De evaluación y mejora."], r: 2,
+      exp: "Proveen condiciones y recursos para que operen los demás procesos." },
+    { q: "En el código FOES-PR-007, el número 007 corresponde a:",
+      ops: ["La versión vigente del documento.",
+            "El consecutivo asignado por el control documental.",
+            "El año de aprobación.",
+            "El número del proceso en el mapa."], r: 1,
+      exp: "Es el consecutivo, y lo asigna el control documental, no el autor." },
+    { q: "Cuando no se ha asignado el código de un documento, la convención institucional indica:",
+      ops: ["Usar el siguiente número disponible.",
+            "Escribir [Pendiente] hasta la asignación formal.",
+            "Dejar el campo vacío.",
+            "Usar las iniciales del responsable."], r: 1,
+      exp: "Inventar consecutivos genera duplicados y rompe la trazabilidad." },
+    { q: "La fase del PHVA donde más se incumple en la práctica es:",
+      ops: ["Planear.", "Hacer.", "Verificar.", "Actuar."], r: 2,
+      exp: "Se ejecutan las actividades pero no se comprueba con datos que el problema desapareció." },
+    { q: "Un seguimiento adecuado a una acción de mejora debe:",
+      ops: ["Indicar el porcentaje de avance estimado.",
+            "Repetir el enunciado de la actividad planeada.",
+            "Describir qué se hizo, cuándo y dónde está la evidencia.",
+            "Señalar quién es el responsable del incumplimiento."], r: 2,
+      exp: "El seguimiento debe ser comprensible y verificable por alguien externo a la acción." },
+    { q: "Una copia impresa de un procedimiento se considera:",
+      ops: ["Documento controlado si tiene el sello del proceso.",
+            "Documento no controlado: sirve para consultar, no para decidir.",
+            "Válida durante seis meses desde su impresión.",
+            "Equivalente a la versión del repositorio."], r: 1,
+      exp: "Solo la versión publicada en el repositorio oficial es la vigente." },
+    { q: "Frente a un hallazgo de auditoría, la corrección corresponde a:",
+      ops: ["El auditor interno que lo detectó.",
+            "La DCPA.",
+            "El líder del proceso auditado.",
+            "El comité directivo."], r: 2,
+      exp: "La independencia de la auditoría exige que quien audita no corrija lo auditado." }
+  ]
+};
+/* =====================================================================
+   LÓGICA DE LA APLICACIÓN
+   ---------------------------------------------------------------------
+   Todo ocurre en el navegador. No hay servidor: las cuentas y el avance
+   se guardan en el almacenamiento local del equipo donde se estudia.
+   Si el almacenamiento no está disponible, la sesión funciona igual
+   pero el avance se pierde al cerrar la pestaña.
+   ===================================================================== */
+
+const almacen = (() => {
+  const memoria = new Map();
+  let disponible = false;
+  try {
+    const prueba = "__sigc__";
+    window.localStorage.setItem(prueba, "1");
+    window.localStorage.removeItem(prueba);
+    disponible = true;
+  } catch (e) { disponible = false; }
+  return {
+    persistente: disponible,
+    leer(clave) {
+      try { return disponible ? window.localStorage.getItem(clave) : (memoria.get(clave) ?? null); }
+      catch (e) { return memoria.get(clave) ?? null; }
+    },
+    escribir(clave, valor) {
+      try { disponible ? window.localStorage.setItem(clave, valor) : memoria.set(clave, valor); }
+      catch (e) { memoria.set(clave, valor); }
+    },
+    borrar(clave) {
+      try { disponible ? window.localStorage.removeItem(clave) : memoria.delete(clave); }
+      catch (e) { memoria.delete(clave); }
+    }
+  };
+})();
+
+const K_USUARIOS = "sigc.usuarios.v1";
+const K_SESION  = "sigc.sesion.v1";
+const K_AVANCE  = "sigc.avance.v1.";
+
+const leerJSON = (clave, porDefecto) => {
+  try { const v = almacen.leer(clave); return v ? JSON.parse(v) : porDefecto; }
+  catch (e) { return porDefecto; }
+};
+const guardarJSON = (clave, valor) => almacen.escribir(clave, JSON.stringify(valor));
+
+async function cifrar(texto) {
+  try {
+    const datos = new TextEncoder().encode("sigc:" + texto);
+    const buf = await crypto.subtle.digest("SHA-256", datos);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) {
+    let h = 0;
+    for (let i = 0; i < texto.length; i++) { h = ((h << 5) - h) + texto.charCodeAt(i); h |= 0; }
+    return "f" + Math.abs(h).toString(16);
+  }
+}
+
+const LECCIONES = CURSO.modulos.flatMap(m => m.lecciones.map(l => ({ ...l, modulo: m })));
+const TOTAL = LECCIONES.length;
+
+let usuario = null;
+let avance = null;
+let vistaActual = { tipo: "inicio", id: null };
+
+/* ------------------------- Utilidades ------------------------- */
+const $ = sel => document.querySelector(sel);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const hoy = () => new Date().toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" });
+const iniciales = n => n.trim().split(/\s+/).slice(0, 2).map(p => p[0]).join("").toUpperCase();
+
+function mensaje(html, ok) {
+  $("#mensaje-acceso").innerHTML = html ? `<div class="aviso ${ok ? "aviso--ok" : ""}">${html}</div>` : "";
+}
+
+/* ------------------------- Avance ------------------------- */
+function avanceVacio() { return { lecciones: {}, examen: null }; }
+function cargarAvance(correo) { avance = leerJSON(K_AVANCE + correo, avanceVacio()); }
+function guardarAvance() { if (usuario) guardarJSON(K_AVANCE + usuario.correo, avance); }
+const completadas = () => Object.keys(avance.lecciones).length;
+const porcentaje = () => Math.round((completadas() / TOTAL) * 100);
+const cursoCompleto = () => completadas() === TOTAL;
+
+/* ------------------------- Acceso ------------------------- */
+function alternarPestana(cual) {
+  const entrar = cual === "entrar";
+  $("#tab-entrar").setAttribute("aria-selected", entrar);
+  $("#tab-registro").setAttribute("aria-selected", !entrar);
+  $("#form-entrar").classList.toggle("oculto", !entrar);
+  $("#form-registro").classList.toggle("oculto", entrar);
+  mensaje("");
+}
+$("#tab-entrar").onclick = () => alternarPestana("entrar");
+$("#tab-registro").onclick = () => alternarPestana("registro");
+
+$("#form-registro").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const nombre = $("#r-nombre").value.trim();
+  const correo = $("#r-correo").value.trim().toLowerCase();
+  const dependencia = $("#r-dependencia").value;
+  const cargo = $("#r-cargo").value.trim();
+  const clave = $("#r-clave").value;
+  const clave2 = $("#r-clave2").value;
+
+  if (!nombre || nombre.length < 4) return mensaje("Escribe tu nombre y apellidos completos.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return mensaje("El correo no tiene un formato válido.");
+  if (!correo.endsWith("uninorte.edu.co")) return mensaje("Usa tu correo institucional terminado en uninorte.edu.co.");
+  if (!dependencia) return mensaje("Selecciona tu dependencia o división.");
+  if (!cargo) return mensaje("Indica tu cargo.");
+  if (clave.length < 8) return mensaje("La contraseña debe tener al menos 8 caracteres.");
+  if (clave !== clave2) return mensaje("Las dos contraseñas no coinciden.");
+
+  const usuarios = leerJSON(K_USUARIOS, {});
+  if (usuarios[correo]) return mensaje("Ya existe una cuenta con ese correo. Entra desde la pestaña Entrar.");
+
+  usuarios[correo] = { nombre, correo, dependencia, cargo, clave: await cifrar(clave), creado: new Date().toISOString() };
+  guardarJSON(K_USUARIOS, usuarios);
+  iniciarSesion(usuarios[correo]);
+});
+
+$("#form-entrar").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const correo = $("#e-correo").value.trim().toLowerCase();
+  const clave = $("#e-clave").value;
+  const usuarios = leerJSON(K_USUARIOS, {});
+  const u = usuarios[correo];
+  if (!u || u.clave !== await cifrar(clave)) {
+    return mensaje("El correo o la contraseña no coinciden con ninguna cuenta de este equipo.");
+  }
+  iniciarSesion(u);
+});
+
+function iniciarSesion(u) {
+  usuario = u;
+  guardarJSON(K_SESION, u.correo);
+  cargarAvance(u.correo);
+  $("#vista-acceso").classList.add("oculto");
+  $("#vista-portal").classList.remove("oculto");
+  $("#avatar").textContent = iniciales(u.nombre);
+  $("#nombre-barra").textContent = u.nombre.split(" ")[0];
+  document.title = "Inducción al SIGC — " + u.nombre.split(" ")[0];
+  ir("inicio");
+}
+
+function cerrarSesion() {
+  almacen.borrar(K_SESION);
+  usuario = null; avance = null;
+  $("#vista-portal").classList.add("oculto");
+  $("#vista-acceso").classList.remove("oculto");
+  $("#form-entrar").reset(); $("#form-registro").reset();
+  alternarPestana("entrar");
+  mensaje("Cerraste la sesión. Tu avance quedó guardado en este equipo.", true);
+  window.scrollTo(0, 0);
+}
+
+$("#btn-salir").onclick = cerrarSesion;
+$("#btn-inicio").onclick = () => ir("inicio");
+$("#btn-perfil").onclick = () => ir("perfil");
+$("#btn-menu").onclick = () => {
+  const abierto = $("#rail").classList.toggle("abierto");
+  $("#btn-menu").setAttribute("aria-expanded", abierto);
+};
+
+/* ------------------------- Navegación ------------------------- */
+function ir(tipo, id) {
+  vistaActual = { tipo, id: id || null };
+  $("#rail").classList.remove("abierto");
+  $("#btn-menu").setAttribute("aria-expanded", "false");
+  pintarRail();
+  pintarAvance();
+  if (tipo === "inicio") pintarInicio();
+  else if (tipo === "leccion") pintarLeccion(id);
+  else if (tipo === "examen") pintarExamen();
+  else if (tipo === "constancia") pintarConstancia();
+  else if (tipo === "perfil") pintarPerfil();
+  $("#contenido").scrollTop = 0;
+  $("#contenido").focus({ preventScroll: true });
+}
+
+function pintarAvance() {
+  const p = porcentaje();
+  $("#barra-avance").setAttribute("aria-valuenow", p);
+  $("#barra-avance").querySelector("i").style.width = p + "%";
+}
+
+function pintarRail() {
+  const modulos = CURSO.modulos.map((m, i) => {
+    const items = m.lecciones.map(l => {
+      const hecho = !!avance.lecciones[l.id];
+      const actual = vistaActual.tipo === "leccion" && vistaActual.id === l.id;
+      return `<li><button data-leccion="${l.id}" ${actual ? 'aria-current="true"' : ""}>
+        <span class="marca-estado ${hecho ? "hecho" : ""}" aria-hidden="true"></span>
+        <span>${esc(l.titulo)}</span></button></li>`;
+    }).join("");
+    return `<div class="rail__grupo">
+      <p class="rail__modulo"><b>${i + 1}</b>${esc(m.titulo)}</p>
+      <ul>${items}</ul></div>`;
+  }).join("");
+
+  const bloqueado = !cursoCompleto();
+  const aprobado = avance.examen && avance.examen.aprobado;
+  $("#rail").innerHTML = `
+    <div class="rail__titulo">
+      <h2>${esc(CURSO.titulo)}</h2>
+      <p>${completadas()} de ${TOTAL} lecciones · versión ${CURSO.version}</p>
+    </div>
+    ${modulos}
+    <div class="rail__grupo rail__final">
+      <ul>
+        <li><button data-ir="examen" ${vistaActual.tipo === "examen" ? 'aria-current="true"' : ""}>
+          <span class="marca-estado ${aprobado ? "hecho" : ""}" aria-hidden="true"></span>
+          <span>Evaluación final${bloqueado ? " · disponible al terminar" : ""}</span></button></li>
+        ${aprobado ? `<li><button data-ir="constancia" ${vistaActual.tipo === "constancia" ? 'aria-current="true"' : ""}>
+          <span class="marca-estado hecho" aria-hidden="true"></span><span>Mi constancia</span></button></li>` : ""}
+      </ul>
+    </div>`;
+
+  $("#rail").querySelectorAll("[data-leccion]").forEach(b => b.onclick = () => ir("leccion", b.dataset.leccion));
+  $("#rail").querySelectorAll("[data-ir]").forEach(b => b.onclick = () => ir(b.dataset.ir));
+}
+
+/* ------------------------- Inicio ------------------------- */
+function pintarInicio() {
+  const hechas = completadas();
+  const siguiente = LECCIONES.find(l => !avance.lecciones[l.id]) || LECCIONES[0];
+  const aprobado = avance.examen && avance.examen.aprobado;
+
+  const ruta = CURSO.modulos.map((m, i) => {
+    const hechasMod = m.lecciones.filter(l => avance.lecciones[l.id]).length;
+    const pct = Math.round((hechasMod / m.lecciones.length) * 100);
+    return `<div class="ruta__mod">
+      <div class="ruta__num">M${i + 1}</div>
+      <div>
+        <h3>${esc(m.titulo)}</h3>
+        <p>${esc(m.resumen)}</p>
+        <p class="ruta__lecciones">${hechasMod} de ${m.lecciones.length} lecciones · ${m.lecciones.map(l => esc(l.titulo)).join(" · ")}</p>
+      </div>
+      <div>
+        <button class="boton boton--secundario boton--fino" data-abrir="${m.lecciones[0].id}">${hechasMod ? "Continuar" : "Abrir"}</button>
+        <div class="barrita"><i style="width:${pct}%"></i></div>
+      </div>
+    </div>`;
+  }).join("");
+
+  $("#contenido").innerHTML = `<div class="lienzo lienzo--ancho">
+    <p class="placa">${CURSO.codigo} · v${CURSO.version}</p>
+    <h1 class="tablero__saludo">Hola, ${esc(usuario.nombre.split(" ")[0])}</h1>
+    <p class="tablero__intro">${hechas === 0
+      ? "Esta inducción te toma unos 90 minutos y puedes hacerla por partes. Empieza por el primer módulo: al final entenderás qué se espera de ti dentro del sistema de calidad."
+      : aprobado
+        ? "Completaste la inducción y aprobaste la evaluación. Tu constancia está disponible en el índice."
+        : "Retoma donde quedaste. El avance se guarda automáticamente en este equipo."}</p>
+
+    <div class="resumen">
+      <div><b>${hechas}/${TOTAL}</b><span>lecciones completadas</span></div>
+      <div><b>${porcentaje()}%</b><span>del curso</span></div>
+      <div><b>${aprobado ? avance.examen.puntaje + "/" + EXAMEN.preguntas.length : "—"}</b><span>evaluación final</span></div>
+      <div><b>${esc(usuario.dependencia.length > 26 ? usuario.dependencia.slice(0, 24) + "…" : usuario.dependencia)}</b><span>tu dependencia</span></div>
+    </div>
+
+    <div class="acciones" style="margin-top:0">
+      <button class="boton boton--fino" style="width:auto" id="btn-continuar">
+        ${hechas === 0 ? "Empezar el módulo 1" : cursoCompleto() ? "Ir a la evaluación final" : "Continuar: " + esc(siguiente.titulo)}
+      </button>
+    </div>
+
+    <h2 style="margin:44px 0 4px;font-size:20px">Ruta del curso</h2>
+    <p style="color:var(--gris);font-size:14.5px;margin-bottom:18px">Cinco módulos, ${TOTAL} lecciones y una evaluación final de ${EXAMEN.preguntas.length} preguntas.</p>
+    <div class="ruta">${ruta}</div>
+  </div>`;
+
+  $("#btn-continuar").onclick = () => cursoCompleto() && hechas > 0 ? ir("examen") : ir("leccion", siguiente.id);
+  $("#contenido").querySelectorAll("[data-abrir]").forEach(b => b.onclick = () => ir("leccion", b.dataset.abrir));
+}
+
+/* ------------------------- Lección ------------------------- */
+function pintarLeccion(id) {
+  const idx = LECCIONES.findIndex(l => l.id === id);
+  const l = LECCIONES[idx];
+  if (!l) return ir("inicio");
+  const hecho = !!avance.lecciones[l.id];
+  const numMod = CURSO.modulos.indexOf(l.modulo) + 1;
+
+  const preguntas = l.preguntas.map((p, i) => `
+    <div class="pregunta" data-p="${i}">
+      <p class="pregunta__texto">${i + 1}. ${esc(p.q)}</p>
+      ${p.ops.map((o, j) => `<label class="opcion" data-op="${j}">
+          <input type="radio" name="p${i}" value="${j}"><span>${esc(o)}</span></label>`).join("")}
+      <div class="retro oculto"></div>
+    </div>`).join("");
+
+  $("#contenido").innerHTML = `<div class="lienzo">
+    <div class="migas"><span>Módulo ${numMod}</span><span>·</span><span>${esc(l.modulo.titulo)}</span></div>
+    <div class="leccion__encabezado">
+      <p class="placa">${l.codigo}</p>
+      <h1>${esc(l.titulo)}</h1>
+      <p class="objetivo">${esc(l.objetivo)}</p>
+    </div>
+    <div class="prosa">${l.html}</div>
+
+    <section class="comprobacion">
+      <h3>Comprobación</h3>
+      <p>Responde correctamente las ${l.preguntas.length} preguntas para dar la lección por vista.</p>
+      ${preguntas}
+      <div class="acciones">
+        <button class="boton boton--fino" style="width:auto" id="btn-comprobar">Comprobar respuestas</button>
+        ${hecho ? '<span style="color:var(--exito);font-size:14.5px;font-weight:500">Lección completada</span>' : ""}
+      </div>
+    </section>
+
+    <div class="acciones" style="border-top:1px solid var(--linea);padding-top:22px;margin-top:34px">
+      ${idx > 0 ? `<button class="boton boton--secundario boton--fino" data-ir-leccion="${LECCIONES[idx - 1].id}">Anterior</button>` : ""}
+      ${idx < TOTAL - 1
+        ? `<button class="boton boton--secundario boton--fino" data-ir-leccion="${LECCIONES[idx + 1].id}">Siguiente: ${esc(LECCIONES[idx + 1].titulo)}</button>`
+        : `<button class="boton boton--secundario boton--fino" data-ir="examen">Ir a la evaluación final</button>`}
+    </div>
+  </div>`;
+
+  $("#contenido").querySelectorAll("[data-ir-leccion]").forEach(b => b.onclick = () => ir("leccion", b.dataset.irLeccion));
+  $("#contenido").querySelectorAll("[data-ir]").forEach(b => b.onclick = () => ir(b.dataset.ir));
+
+  $("#btn-comprobar").onclick = () => {
+    let todas = true;
+    l.preguntas.forEach((p, i) => {
+      const cont = $(`.pregunta[data-p="${i}"]`);
+      const sel = cont.querySelector("input:checked");
+      cont.querySelectorAll(".opcion").forEach(o => o.classList.remove("correcta", "incorrecta"));
+      const retro = cont.querySelector(".retro");
+      retro.classList.remove("oculto", "ok", "no");
+      if (!sel) {
+        todas = false;
+        retro.classList.add("no");
+        retro.textContent = "Selecciona una respuesta.";
+        return;
+      }
+      const elegido = Number(sel.value);
+      const bien = elegido === p.r;
+      if (!bien) todas = false;
+      cont.querySelector(`.opcion[data-op="${elegido}"]`).classList.add(bien ? "correcta" : "incorrecta");
+      if (!bien) cont.querySelector(`.opcion[data-op="${p.r}"]`).classList.add("correcta");
+      retro.classList.add(bien ? "ok" : "no");
+      retro.textContent = (bien ? "Correcto. " : "Revisa: ") + p.exp;
+    });
+
+    if (todas && !avance.lecciones[l.id]) {
+      avance.lecciones[l.id] = { fecha: new Date().toISOString() };
+      guardarAvance();
+      pintarRail(); pintarAvance();
+      const aviso = document.createElement("div");
+      aviso.className = "retro ok";
+      aviso.style.marginTop = "14px";
+      aviso.textContent = cursoCompleto()
+        ? "Lección completada. Terminaste las " + TOTAL + " lecciones: ya puedes presentar la evaluación final."
+        : "Lección completada. Puedes continuar con la siguiente.";
+      $("#btn-comprobar").parentElement.after(aviso);
+    }
+  };
+}
+
+/* ------------------------- Evaluación final ------------------------- */
+function pintarExamen() {
+  if (!cursoCompleto()) {
+    const faltan = TOTAL - completadas();
+    const siguiente = LECCIONES.find(l => !avance.lecciones[l.id]);
+    $("#contenido").innerHTML = `<div class="lienzo">
+      <p class="placa">${EXAMEN.codigo}</p>
+      <h1 style="font-size:30px;margin:12px 0 12px">Evaluación final</h1>
+      <p class="objetivo">La evaluación se habilita cuando completes las ${TOTAL} lecciones. Te ${faltan === 1 ? "falta 1" : "faltan " + faltan}.</p>
+      <div class="acciones"><button class="boton boton--fino" style="width:auto" data-ir-leccion="${siguiente.id}">Continuar en: ${esc(siguiente.titulo)}</button></div>
+    </div>`;
+    $("#contenido").querySelectorAll("[data-ir-leccion]").forEach(b => b.onclick = () => ir("leccion", b.dataset.irLeccion));
+    return;
+  }
+
+  const previo = avance.examen;
+  const preguntas = EXAMEN.preguntas.map((p, i) => `
+    <div class="pregunta" data-p="${i}">
+      <p class="pregunta__texto">${i + 1}. ${esc(p.q)}</p>
+      ${p.ops.map((o, j) => `<label class="opcion" data-op="${j}">
+        <input type="radio" name="x${i}" value="${j}"><span>${esc(o)}</span></label>`).join("")}
+      <div class="retro oculto"></div>
+    </div>`).join("");
+
+  $("#contenido").innerHTML = `<div class="lienzo">
+    <p class="placa">${EXAMEN.codigo}</p>
+    <h1 style="font-size:30px;margin:12px 0 10px">Evaluación final</h1>
+    <p class="objetivo">${EXAMEN.preguntas.length} preguntas sobre los cinco módulos. Necesitas ${EXAMEN.minimo} respuestas correctas para aprobar. Puedes intentarlo las veces que necesites.</p>
+    ${previo ? `<div class="aviso ${previo.aprobado ? "aviso--ok" : ""}" style="margin-top:22px">
+      Intento anterior: ${previo.puntaje} de ${EXAMEN.preguntas.length} correctas ${previo.aprobado ? "· aprobada" : "· no aprobada"}.</div>` : ""}
+    <div style="margin-top:26px">${preguntas}</div>
+    <div class="acciones">
+      <button class="boton boton--fino" style="width:auto" id="btn-calificar">Calificar evaluación</button>
+    </div>
+    <div id="resultado"></div>
+  </div>`;
+
+  $("#btn-calificar").onclick = () => {
+    let puntaje = 0, sinResponder = 0;
+    EXAMEN.preguntas.forEach((p, i) => {
+      const cont = $(`.pregunta[data-p="${i}"]`);
+      const sel = cont.querySelector("input:checked");
+      cont.querySelectorAll(".opcion").forEach(o => o.classList.remove("correcta", "incorrecta"));
+      const retro = cont.querySelector(".retro");
+      retro.classList.remove("oculto", "ok", "no");
+      if (!sel) { sinResponder++; retro.classList.add("no"); retro.textContent = "Sin responder."; return; }
+      const elegido = Number(sel.value);
+      const bien = elegido === p.r;
+      if (bien) puntaje++;
+      cont.querySelector(`.opcion[data-op="${elegido}"]`).classList.add(bien ? "correcta" : "incorrecta");
+      if (!bien) cont.querySelector(`.opcion[data-op="${p.r}"]`).classList.add("correcta");
+      retro.classList.add(bien ? "ok" : "no");
+      retro.textContent = (bien ? "Correcto. " : "Revisa: ") + p.exp;
+    });
+
+    if (sinResponder) {
+      $("#resultado").innerHTML = `<div class="aviso">Faltan ${sinResponder} preguntas por responder. Complétalas y vuelve a calificar.</div>`;
+      return;
+    }
+
+    const aprobado = puntaje >= EXAMEN.minimo;
+    const intentos = (previo ? previo.intentos : 0) + 1;
+    if (!avance.examen || puntaje > avance.examen.puntaje || aprobado) {
+      avance.examen = { puntaje, aprobado, intentos, fecha: new Date().toISOString() };
+    } else {
+      avance.examen.intentos = intentos;
+    }
+    guardarAvance(); pintarRail();
+
+    $("#resultado").innerHTML = aprobado
+      ? `<div class="aviso aviso--ok"><strong>Aprobada con ${puntaje} de ${EXAMEN.preguntas.length}.</strong> Ya puedes descargar tu constancia de inducción.</div>
+         <div class="acciones"><button class="boton boton--fino" style="width:auto" data-ir="constancia">Ver mi constancia</button></div>`
+      : `<div class="aviso"><strong>Obtuviste ${puntaje} de ${EXAMEN.preguntas.length}.</strong> Necesitas ${EXAMEN.minimo} para aprobar. Revisa la retroalimentación de cada pregunta y vuelve a intentarlo.</div>
+         <div class="acciones"><button class="boton boton--fino" style="width:auto" id="btn-reintentar">Intentar de nuevo</button></div>`;
+
+    $("#resultado").querySelectorAll("[data-ir]").forEach(b => b.onclick = () => ir(b.dataset.ir));
+    const rein = $("#btn-reintentar");
+    if (rein) rein.onclick = () => ir("examen");
+    if ($("#resultado").scrollIntoView) $("#resultado").scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+}
+
+/* ------------------------- Constancia ------------------------- */
+function folio(u) {
+  let h = 0; const base = u.correo + CURSO.codigo;
+  for (let i = 0; i < base.length; i++) { h = ((h << 5) - h) + base.charCodeAt(i); h |= 0; }
+  return Math.abs(h).toString(36).toUpperCase().padStart(6, "0").slice(0, 6);
+}
+
+function pintarConstancia() {
+  if (!avance.examen || !avance.examen.aprobado) return ir("examen");
+  const f = new Date(avance.examen.fecha);
+  $("#contenido").innerHTML = `<div class="lienzo lienzo--ancho">
+    <div class="migas no-imprimir"><span>Constancia de inducción</span></div>
+    <div class="constancia">
+      <svg class="constancia__sello" style="color:var(--azul-800)"><use href="#sello"></use></svg>
+      <h2>Universidad del Norte · Dirección de Calidad y Proyectos Académicos</h2>
+      <p class="constancia__nombre">${esc(usuario.nombre)}</p>
+      <p class="constancia__datos">${esc(usuario.cargo)} · ${esc(usuario.dependencia)}</p>
+      <p class="constancia__texto">Completó la inducción al Sistema Integrado de Gestión de Calidad, con una duración estimada de 90 minutos, y aprobó la evaluación final con ${avance.examen.puntaje} de ${EXAMEN.preguntas.length} respuestas correctas.</p>
+      <div class="constancia__pie">
+        <span>${CURSO.codigo} · versión ${CURSO.version}</span>
+        <span>Folio ${folio(usuario)}</span>
+        <span>${f.toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" })}</span>
+      </div>
+    </div>
+    <div class="acciones no-imprimir">
+      <button class="boton boton--fino" style="width:auto" onclick="window.print()">Imprimir o guardar en PDF</button>
+      <span style="font-size:13.5px;color:var(--gris)">Esta constancia acredita la inducción; no reemplaza el registro de formación de la Dirección de Gestión y Desarrollo Humano.</span>
+    </div>
+  </div>`;
+}
+
+/* ------------------------- Perfil ------------------------- */
+function pintarPerfil() {
+  const aprobado = avance.examen && avance.examen.aprobado;
+  $("#contenido").innerHTML = `<div class="lienzo">
+    <p class="placa">Mi perfil</p>
+    <h1 style="font-size:30px;margin:12px 0 8px">${esc(usuario.nombre)}</h1>
+    <p class="objetivo">Datos con los que se emite la constancia y estado de tu inducción.</p>
+    <div class="ficha">
+      <dl>
+        <dt>Correo institucional</dt><dd>${esc(usuario.correo)}</dd>
+        <dt>Dependencia</dt><dd>${esc(usuario.dependencia)}</dd>
+        <dt>Cargo</dt><dd>${esc(usuario.cargo)}</dd>
+        <dt>Cuenta creada</dt><dd>${new Date(usuario.creado).toLocaleDateString("es-CO")}</dd>
+        <dt>Lecciones completadas</dt><dd>${completadas()} de ${TOTAL} (${porcentaje()}%)</dd>
+        <dt>Evaluación final</dt><dd>${avance.examen ? avance.examen.puntaje + " de " + EXAMEN.preguntas.length + (aprobado ? " · aprobada" : " · no aprobada") : "Sin presentar"}</dd>
+      </dl>
+    </div>
+    <div class="acciones">
+      <button class="boton boton--secundario boton--fino" id="btn-exportar">Descargar mi avance</button>
+      <button class="boton boton--secundario boton--fino" id="btn-reiniciar">Reiniciar mi avance</button>
+    </div>
+    <p class="nota-privacidad">${almacen.persistente
+      ? "Tus datos y tu avance están guardados solo en este navegador. Si estudias desde otro equipo tendrás que registrarte de nuevo."
+      : "Este navegador tiene bloqueado el almacenamiento local: tu avance se perderá al cerrar la pestaña."}</p>
+  </div>`;
+
+  $("#btn-exportar").onclick = () => {
+    const datos = {
+      nombre: usuario.nombre, correo: usuario.correo, dependencia: usuario.dependencia, cargo: usuario.cargo,
+      curso: CURSO.codigo, version: CURSO.version,
+      leccionesCompletadas: Object.keys(avance.lecciones).length, totalLecciones: TOTAL,
+      detalle: avance.lecciones, examen: avance.examen, generado: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(datos, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "avance-sigc-" + usuario.correo.split("@")[0] + ".json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  $("#btn-reiniciar").onclick = () => {
+    if (!confirm("Se borrará tu avance en las lecciones y la evaluación. Tu cuenta se conserva. ¿Continuar?")) return;
+    avance = avanceVacio();
+    guardarAvance();
+    ir("inicio");
+  };
+}
+
+/* ------------------------- Arranque ------------------------- */
+(function iniciar() {
+  if (!almacen.persistente) {
+    $("#nota-privacidad").textContent = "Este navegador tiene bloqueado el almacenamiento local: podrás recorrer el curso, pero el avance no se conservará al cerrar la pestaña.";
+  }
+  const correo = almacen.leer(K_SESION);
+  if (correo) {
+    const u = leerJSON(K_USUARIOS, {})[correo];
+    if (u) return iniciarSesion(u);
+    almacen.borrar(K_SESION);
+  }
+})();
+</script>
+</body>
+</html>
